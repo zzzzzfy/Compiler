@@ -1,0 +1,14 @@
+int main() {
+	int cnt = 0;
+	int i;
+	for(i = 0; i < 10; ++i) {
+		if(i % 3 == 0) {
+			continue;
+		}
+		cnt++;
+	}
+	println(toString(cnt));
+
+
+	return 0;
+}
