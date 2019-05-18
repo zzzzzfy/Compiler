@@ -1,23 +1,38 @@
 default rel
 
+global V_INF_0
+global V_nMax_0
 global V_n_0
-global V_h_0
-global V_now_0
-global A_a_0
-global V_A_0
-global V_M_0
-global V_Q_0
-global V_R_0
-global V_seed_0
+global V_m_0
+global V_id_cnt_0
+global A_din_0
+global A_sp_0
+global A_dintree_0
+global A_char_ID_0
 global ___init
-global random
-global initialize
-global swap
-global pd
-global show
-global win
+global max
+global Node_copy
+global Node_init
+global Node_judge
+global Node_push_up
+global Node_addtag_ch
+global Node_addtag_ro
+global Node_push_down
+global Node_rot
+global Node_rotto
+global Node_Node
+global splay_tree_build
+global splay_tree_build_tree
+global splay_tree_find
+global splay_tree_dfs
+global splay_tree_del
+global splay_tree_change
+global splay_tree_rol
+global splay_tree_getsum
+global splay_tree_getMax
+global splay_tree_splay_tree
+global equ
 global merge
-global move
 global main
 global print
 global println
@@ -623,771 +638,2788 @@ ___init:
         push rbp
         mov rbp, rsp
         sub rsp, 0
-        mov qword [rel V_A_0], 48271
-        mov qword [rel V_M_0], 2147483647
-        mov qword [rel V_seed_0], 1
+        mov qword [rel V_INF_0], 1000000000
+        mov qword [rel V_nMax_0], 4000010
+        mov qword [rel V_id_cnt_0], 0
+        mov rax, qword [rel V_nMax_0]
+        mov rcx, 3
+        sal rax, cl
+        add rax, 8
+        mov rdi, rax
+        call malloc
+        mov rdx, rax
+        mov rcx, qword [rel V_nMax_0]
+        mov qword [rdx], rcx
+        mov qword [rel A_din_0], rdx
+        mov qword [rel A_char_ID_0], S_0
         mov rsp, rbp
         pop rbp
         ret 
 
-random:
-        push rbp
-        mov rbp, rsp
-        sub rsp, 0
-        mov rax, qword [rel V_seed_0]
-        cdq 
-        mov rcx, qword [rel V_Q_0]
-        idiv rcx
-        mov rcx, rdx
-        mov rax, qword [rel V_A_0]
-        imul rcx
-        mov rsi, rax
-        mov rax, qword [rel V_seed_0]
-        cdq 
-        mov rcx, qword [rel V_Q_0]
-        idiv rcx
-        mov rcx, rax
-        mov rax, qword [rel V_R_0]
-        imul rcx
-        mov rcx, rax
-        mov rax, rsi
-        sub rax, rcx
-        mov rax, rax
-        cmp rax, 0
-        jl label_6
-        mov qword [rel V_seed_0], rax
-label_5:
-        mov rax, qword [rel V_seed_0]
-        mov rsp, rbp
-        pop rbp
-        ret 
-label_6:
-        mov rax, rax
-        add rax, qword [rel V_M_0]
-        mov qword [rel V_seed_0], rax
-        jmp label_5
-
-initialize:
+max:
         push rbp
         mov rbp, rsp
         sub rsp, 0
         mov rcx, rdi
-        mov qword [rel V_seed_0], rcx
+        mov rax, rsi
+        cmp rcx, rax
+        jg label_4
+        mov rax, rax
+label_3:
         mov rsp, rbp
         pop rbp
         ret 
+label_4:
+        mov rax, rcx
+        jmp label_3
 
-swap:
+Node_copy:
         push rbp
         mov rbp, rsp
         sub rsp, 0
         mov rdx, rdi
         mov rsi, rsi
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rdx*8+8]
-        mov rdi, qword [rcx]
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rdx*8+8]
-        mov rdx, qword [rel A_a_0]
-        lea rdx, [rdx+rsi*8+8]
-        mov rdx, qword [rdx]
-        mov qword [rcx], rdx
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rsi*8+8]
-        mov qword [rcx], rdi
+        lea rcx, [rsi+0*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+0*8], rcx
+        lea rcx, [rsi+1*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+1*8], rcx
+        lea rcx, [rsi+2*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+2*8], rcx
+        lea rcx, [rsi+3*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+3*8], rcx
+        lea rcx, [rsi+4*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+4*8], rcx
+        lea rcx, [rsi+5*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+5*8], rcx
+        lea rcx, [rsi+6*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+6*8], rcx
+        lea rcx, [rsi+7*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+7*8], rcx
+        lea rcx, [rsi+8*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+8*8], rcx
+        lea rcx, [rsi+9*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+9*8], rcx
+        mov rcx, qword [rdx+10*8]
+        lea rdi, [rcx+0*8+8]
+        lea rcx, [rsi+10*8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+0*8+8]
+        mov rcx, qword [rcx]
+        mov qword [rdi], rcx
+        mov rcx, qword [rdx+10*8]
+        lea rdi, [rcx+1*8+8]
+        lea rcx, [rsi+10*8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+1*8+8]
+        mov rcx, qword [rcx]
+        mov qword [rdi], rcx
+        lea rcx, [rsi+11*8]
+        mov rcx, qword [rcx]
+        mov qword [rdx+11*8], rcx
         mov rsp, rbp
         pop rbp
         ret 
 
-pd:
+Node_init:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        push r15
+        mov r15, rdi
+        mov rcx, rsi
+        mov rax, rdx
+        mov qword [r15+0*8], rax
+        mov qword [r15+2*8], 1
+        mov qword [r15+4*8], 0
+        mov qword [r15+6*8], 0
+        mov qword [r15+5*8], 0
+        mov qword [r15+3*8], rcx
+        mov qword [r15+1*8], rcx
+        mov qword [r15+7*8], rcx
+        mov qword [r15+8*8], rcx
+        mov qword [r15+9*8], rcx
+        mov rdi, 24
+        call malloc
+        mov rcx, rax
+        mov qword [rcx], 2
+        mov qword [r15+10*8], rcx
+        mov rcx, qword [r15+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov qword [rcx], 0
+        mov rcx, qword [r15+10*8]
+        lea rcx, [rcx+1*8+8]
+        mov qword [rcx], 0
+        mov qword [r15+11*8], 0
+        pop r15
+        mov rsp, rbp
+        pop rbp
+        ret 
+
+Node_judge:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        mov rcx, rdi
+        mov rax, rsi
+        mov rcx, qword [rcx+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov rcx, qword [rcx]
+        mov rax, rax
+        cmp rcx, 0
+        je label_16
+        cmp rax, 0
+        je label_24
+        lea rcx, [rcx+0*8]
+        lea rdx, [rax+0*8]
+        mov rax, qword [rcx]
+        cmp rax, qword [rdx]
+        je label_28
+        mov rax, 0
+label_15:
+        cmp rax, 1
+        je label_12
+        mov rax, 1
+label_11:
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_12:
+        mov rax, 0
+        jmp label_11
+label_28:
+        mov rax, 1
+        jmp label_15
+label_24:
+        mov rax, 0
+        jmp label_15
+label_16:
+        cmp rax, 0
+        je label_18
+        mov rax, 0
+        jmp label_15
+label_18:
+        mov rax, 1
+        jmp label_15
+
+Node_push_up:
         push rbp
         mov rbp, rsp
         sub rsp, 0
         mov rsi, rdi
-label_13:
-        mov rax, qword [rel V_h_0]
-        cmp rax, rsi
-        jg label_14
-        mov rcx, qword [rel V_h_0]
-        inc rcx
-        mov rax, qword [rel V_h_0]
-        imul rcx
-        mov rax, rax
-        mov rax, rax
-        mov rcx, 1
-        sar rax, cl
-        cmp rsi, rax
-        je label_17
-        mov rax, qword [rel V_h_0]
-        inc rax
-        mov qword [rel V_h_0], rax
-        jmp label_13
-label_17:
-        mov rax, 1
-label_12:
+        mov qword [rsi+2*8], 1
+        mov rcx, qword [rsi+1*8]
+        mov qword [rsi+3*8], rcx
+        mov rcx, 0
+label_32:
+        cmp rcx, 2
+        jl label_34
+        mov rcx, qword [rsi+1*8]
+        mov qword [rsi+7*8], rcx
+        mov rcx, qword [rsi+1*8]
+        mov qword [rsi+8*8], rcx
+        mov rcx, qword [rsi+1*8]
+        mov qword [rsi+9*8], rcx
+        mov rdi, qword [rsi+1*8]
+        mov r8, qword [rsi+1*8]
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov rcx, qword [rcx]
+        cmp rcx, 0
+        je label_39
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+7*8]
+        mov rcx, qword [rcx]
+        mov qword [rsi+7*8], rcx
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+3*8]
+        mov rdx, rdi
+        add rdx, qword [rcx]
+        mov rdi, rdx
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+8*8]
+        mov rdx, qword [rcx]
+        mov r9, 0
+        cmp rdx, r9
+        jg label_41
+        mov rdx, r9
+label_40:
+        mov rcx, r8
+        add rcx, rdx
+        mov r8, rcx
+label_39:
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+1*8+8]
+        mov rcx, qword [rcx]
+        cmp rcx, 0
+        je label_44
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+1*8+8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+8*8]
+        mov rcx, qword [rcx]
+        mov qword [rsi+8*8], rcx
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+1*8+8]
+        mov rcx, qword [rcx]
+        lea rdx, [rcx+3*8]
+        mov rcx, r8
+        add rcx, qword [rdx]
+        mov r8, rcx
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+1*8+8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+7*8]
+        mov rdx, qword [rcx]
+        mov r9, 0
+        cmp rdx, r9
+        jg label_46
+        mov rdx, r9
+label_45:
+        mov rcx, rdi
+        add rcx, rdx
+        mov rdi, rcx
+label_44:
+        mov rdx, qword [rsi+7*8]
+        mov r9, rdi
+        cmp rdx, r9
+        jg label_49
+        mov rcx, r9
+label_48:
+        mov qword [rsi+7*8], rcx
+        mov rdx, qword [rsi+8*8]
+        mov r9, r8
+        cmp rdx, r9
+        jg label_52
+        mov rcx, r9
+label_51:
+        mov qword [rsi+8*8], rcx
+        mov rcx, 0
+label_54:
+        cmp rcx, 2
+        jl label_56
+        mov rcx, qword [rsi+1*8]
+        mov rdx, qword [rsi+10*8]
+        lea rdx, [rdx+0*8+8]
+        mov rdx, qword [rdx]
+        cmp rdx, 0
+        je label_64
+        mov rdx, qword [rsi+10*8]
+        lea rdx, [rdx+0*8+8]
+        mov rdx, qword [rdx]
+        lea rdx, [rdx+8*8]
+        mov rdx, qword [rdx]
+        mov r9, 0
+        cmp rdx, r9
+        jg label_66
+        mov rdx, r9
+label_65:
+        mov rcx, rcx
+        add rcx, rdx
+        mov rcx, rcx
+label_64:
+        mov rdx, qword [rsi+10*8]
+        lea rdx, [rdx+1*8+8]
+        mov rdx, qword [rdx]
+        cmp rdx, 0
+        je label_69
+        mov rdx, qword [rsi+10*8]
+        lea rdx, [rdx+1*8+8]
+        mov rdx, qword [rdx]
+        lea rdx, [rdx+7*8]
+        mov rdx, qword [rdx]
+        mov r9, 0
+        cmp rdx, r9
+        jg label_71
+        mov rdx, r9
+label_70:
+        mov rcx, rcx
+        add rcx, rdx
+        mov rcx, rcx
+label_69:
+        mov rdx, qword [rsi+9*8]
+        mov r9, rcx
+        cmp rdx, r9
+        jg label_74
+        mov rcx, r9
+label_73:
+        mov qword [rsi+9*8], rcx
         mov rsp, rbp
         pop rbp
         ret 
-label_14:
-        mov rax, 0
-        jmp label_12
+label_74:
+        mov rcx, rdx
+        jmp label_73
+label_71:
+        mov rdx, rdx
+        jmp label_70
+label_66:
+        mov rdx, rdx
+        jmp label_65
+label_56:
+        mov rdx, qword [rsi+10*8]
+        lea rdx, [rdx+rcx*8+8]
+        mov rdx, qword [rdx]
+        cmp rdx, 0
+        je label_59
+        mov rdx, qword [rsi+10*8]
+        lea rdx, [rdx+rcx*8+8]
+        mov rdx, qword [rdx]
+        lea rdi, [rdx+9*8]
+        mov rdx, qword [rsi+9*8]
+        mov r9, qword [rdi]
+        cmp rdx, r9
+        jg label_61
+        mov rdx, r9
+label_60:
+        mov qword [rsi+9*8], rdx
+label_59:
+        inc rcx
+        jmp label_54
+label_61:
+        mov rdx, rdx
+        jmp label_60
+label_52:
+        mov rcx, rdx
+        jmp label_51
+label_49:
+        mov rcx, rdx
+        jmp label_48
+label_46:
+        mov rdx, rdx
+        jmp label_45
+label_41:
+        mov rdx, rdx
+        jmp label_40
+label_34:
+        mov rdx, qword [rsi+10*8]
+        lea rdx, [rdx+rcx*8+8]
+        mov rdx, qword [rdx]
+        cmp rdx, 0
+        je label_37
+        mov rdx, qword [rsi+10*8]
+        lea rdx, [rdx+rcx*8+8]
+        mov rdx, qword [rdx]
+        lea rdx, [rdx+2*8]
+        mov rdi, qword [rsi+2*8]
+        add rdi, qword [rdx]
+        mov qword [rsi+2*8], rdi
+        mov rdx, qword [rsi+10*8]
+        lea rdx, [rdx+rcx*8+8]
+        mov rdx, qword [rdx]
+        lea rdi, [rdx+3*8]
+        mov rdx, qword [rsi+3*8]
+        add rdx, qword [rdi]
+        mov qword [rsi+3*8], rdx
+label_37:
+        inc rcx
+        jmp label_32
 
-show:
+Node_addtag_ch:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        mov rdi, rdi
+        mov rsi, rsi
+        mov qword [rdi+1*8], rsi
+        mov rax, qword [rdi+2*8]
+        imul rsi
+        mov rcx, rax
+        mov qword [rdi+3*8], rcx
+        cmp rsi, 0
+        jl label_80
+        mov rcx, qword [rdi+3*8]
+        mov qword [rdi+7*8], rcx
+        mov rcx, qword [rdi+3*8]
+        mov qword [rdi+8*8], rcx
+        mov rcx, qword [rdi+3*8]
+        mov qword [rdi+9*8], rcx
+label_79:
+        mov qword [rdi+4*8], 1
+        mov qword [rdi+5*8], rsi
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_80:
+        mov qword [rdi+7*8], rsi
+        mov qword [rdi+8*8], rsi
+        mov qword [rdi+9*8], rsi
+        jmp label_79
+
+Node_addtag_ro:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        mov rdx, rdi
+        mov rcx, qword [rdx+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov rdi, qword [rcx]
+        mov rcx, qword [rdx+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov rsi, qword [rdx+10*8]
+        lea rsi, [rsi+1*8+8]
+        mov rsi, qword [rsi]
+        mov qword [rcx], rsi
+        mov rcx, qword [rdx+10*8]
+        lea rcx, [rcx+1*8+8]
+        mov qword [rcx], rdi
+        mov rcx, qword [rdx+7*8]
+        mov rsi, qword [rdx+8*8]
+        mov qword [rdx+7*8], rsi
+        mov qword [rdx+8*8], rcx
+        mov rcx, qword [rdx+6*8]
+        xor rcx, 1
+        mov qword [rdx+6*8], rcx
+        mov rsp, rbp
+        pop rbp
+        ret 
+
+Node_push_down:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        mov rsi, rdi
+        mov rcx, qword [rsi+4*8]
+        cmp rcx, 1
+        je label_85
+label_86:
+        mov rcx, qword [rsi+6*8]
+        cmp rcx, 1
+        je label_97
+label_98:
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_97:
+        mov r8, 0
+label_99:
+        cmp r8, 2
+        jl label_101
+        mov qword [rsi+6*8], 0
+        jmp label_98
+label_101:
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+r8*8+8]
+        mov rcx, qword [rcx]
+        cmp rcx, 0
+        je label_104
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+r8*8+8]
+        mov r9, qword [rcx]
+        mov rcx, qword [r9+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov rdx, qword [rcx]
+        mov rcx, qword [r9+10*8]
+        lea rcx, [rcx+0*8+8]
+        mov rdi, qword [r9+10*8]
+        lea rdi, [rdi+1*8+8]
+        mov rdi, qword [rdi]
+        mov qword [rcx], rdi
+        mov rcx, qword [r9+10*8]
+        lea rcx, [rcx+1*8+8]
+        mov qword [rcx], rdx
+        mov rcx, qword [r9+7*8]
+        mov rdx, qword [r9+8*8]
+        mov qword [r9+7*8], rdx
+        mov qword [r9+8*8], rcx
+        mov rcx, qword [r9+6*8]
+        xor rcx, 1
+        mov qword [r9+6*8], rcx
+label_104:
+        inc r8
+        jmp label_99
+label_85:
+        mov r8, 0
+label_87:
+        cmp r8, 2
+        jl label_89
+        mov qword [rsi+4*8], 0
+        jmp label_86
+label_89:
+        mov rcx, qword [rsi+10*8]
+        lea rcx, [rcx+r8*8+8]
+        mov rcx, qword [rcx]
+        cmp rcx, 0
+        je label_92
+        mov rax, qword [rsi+10*8]
+        lea rax, [rax+r8*8+8]
+        mov r9, qword [rax]
+        mov rdi, qword [rsi+5*8]
+        mov qword [r9+1*8], rdi
+        mov rax, qword [r9+2*8]
+        imul rdi
+        mov rcx, rax
+        mov qword [r9+3*8], rcx
+        cmp rdi, 0
+        jl label_96
+        mov rcx, qword [r9+3*8]
+        mov qword [r9+7*8], rcx
+        mov rcx, qword [r9+3*8]
+        mov qword [r9+8*8], rcx
+        mov rcx, qword [r9+3*8]
+        mov qword [r9+9*8], rcx
+label_95:
+        mov qword [r9+4*8], 1
+        mov qword [r9+5*8], rdi
+label_92:
+        inc r8
+        jmp label_87
+label_96:
+        mov qword [r9+7*8], rdi
+        mov qword [r9+8*8], rdi
+        mov qword [r9+9*8], rdi
+        jmp label_95
+
+Node_rot:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        mov rcx, rdi
+        mov rdx, qword [rcx+11*8]
+        mov rax, rdx
+        mov rsi, rcx
+        mov rax, qword [rax+10*8]
+        lea rax, [rax+0*8+8]
+        mov rax, qword [rax]
+        mov rdi, rsi
+        cmp rax, 0
+        je label_113
+        cmp rdi, 0
+        je label_121
+        lea rax, [rax+0*8]
+        lea rsi, [rdi+0*8]
+        mov rax, qword [rax]
+        cmp rax, qword [rsi]
+        je label_125
+        mov rax, 0
+label_112:
+        cmp rax, 1
+        je label_109
+        mov rax, 1
+label_108:
+        mov rdi, rax
+        lea rax, [rdx+10*8]
+        mov rax, qword [rax]
+        lea rsi, [rax+rdi*8+8]
+        mov rax, rdi
+        xor rax, 1
+        mov r8, qword [rcx+10*8]
+        lea rax, [r8+rax*8+8]
+        mov rax, qword [rax]
+        mov qword [rsi], rax
+        mov rax, rdi
+        xor rax, 1
+        mov rsi, qword [rcx+10*8]
+        lea rax, [rsi+rax*8+8]
+        mov qword [rax], rdx
+        lea rax, [rdx+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+rdi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_128
+        lea rax, [rdx+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+rdi*8+8]
+        mov rax, qword [rax]
+        lea rax, [rax+11*8]
+        mov qword [rax], rdx
+label_128:
+        lea rax, [rdx+11*8]
+        mov rax, qword [rax]
+        mov qword [rcx+11*8], rax
+        lea rax, [rdx+11*8]
+        mov qword [rax], rcx
+        mov rax, qword [rcx+11*8]
+        cmp rax, 0
+        je label_130
+        mov rax, qword [rcx+11*8]
+        lea r8, [rax+10*8]
+        mov rax, qword [rcx+11*8]
+        mov rsi, rdx
+        mov rax, qword [rax+10*8]
+        lea rax, [rax+0*8+8]
+        mov rax, qword [rax]
+        mov rdi, rsi
+        cmp rax, 0
+        je label_136
+        cmp rdi, 0
+        je label_144
+        lea rsi, [rax+0*8]
+        lea rax, [rdi+0*8]
+        mov rsi, qword [rsi]
+        cmp rsi, qword [rax]
+        je label_148
+        mov rax, 0
+label_135:
+        cmp rax, 1
+        je label_132
+        mov rsi, 1
+label_131:
+        mov rax, qword [r8]
+        lea rax, [rax+rsi*8+8]
+        mov qword [rax], rcx
+label_130:
+        mov rdi, rdx
+        call Node_push_up
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_132:
+        mov rsi, 0
+        jmp label_131
+label_148:
+        mov rax, 1
+        jmp label_135
+label_144:
+        mov rax, 0
+        jmp label_135
+label_136:
+        cmp rdi, 0
+        je label_138
+        mov rax, 0
+        jmp label_135
+label_138:
+        mov rax, 1
+        jmp label_135
+label_109:
+        mov rax, 0
+        jmp label_108
+label_125:
+        mov rax, 1
+        jmp label_112
+label_121:
+        mov rax, 0
+        jmp label_112
+label_113:
+        cmp rdi, 0
+        je label_115
+        mov rax, 0
+        jmp label_112
+label_115:
+        mov rax, 1
+        jmp label_112
+
+Node_rotto:
         push rbp
         mov rbp, rsp
         sub rsp, 0
         push rbx
-        mov rbx, 0
-label_25:
-        cmp rbx, qword [rel V_now_0]
-        jl label_27
-        mov rdi, S_1
-        call println
+        push r15
+        mov r15, rdi
+        mov rbx, rsi
+label_152:
+        mov rcx, qword [r15+11*8]
+        mov rax, rbx
+        cmp rcx, 0
+        je label_156
+        cmp rax, 0
+        je label_164
+        lea rcx, [rcx+0*8]
+        lea rax, [rax+0*8]
+        mov rcx, qword [rcx]
+        cmp rcx, qword [rax]
+        je label_168
+        mov rax, 0
+label_155:
+        cmp rax, 1
+        je label_154
+        mov rdx, qword [r15+11*8]
+        lea rax, [rdx+11*8]
+        mov rcx, qword [rax]
+        mov rax, rbx
+        cmp rcx, 0
+        je label_173
+        cmp rax, 0
+        je label_181
+        lea rcx, [rcx+0*8]
+        lea rax, [rax+0*8]
+        mov rcx, qword [rcx]
+        cmp rcx, qword [rax]
+        je label_185
+        mov rax, 0
+label_172:
+        cmp rax, 1
+        je label_170
+        lea rax, [rdx+11*8]
+        mov rax, qword [rax]
+        mov rcx, rdx
+        mov rax, qword [rax+10*8]
+        lea rax, [rax+0*8+8]
+        mov rax, qword [rax]
+        mov rcx, rcx
+        cmp rax, 0
+        je label_195
+        cmp rcx, 0
+        je label_203
+        lea rax, [rax+0*8]
+        lea rcx, [rcx+0*8]
+        mov rax, qword [rax]
+        cmp rax, qword [rcx]
+        je label_207
+        mov rax, 0
+label_194:
+        cmp rax, 1
+        je label_191
+        mov rsi, 1
+label_190:
+        mov rax, rdx
+        mov rcx, r15
+        mov rax, qword [rax+10*8]
+        lea rax, [rax+0*8+8]
+        mov rax, qword [rax]
+        mov rcx, rcx
+        cmp rax, 0
+        je label_214
+        cmp rcx, 0
+        je label_222
+        lea rax, [rax+0*8]
+        lea rcx, [rcx+0*8]
+        mov rax, qword [rax]
+        cmp rax, qword [rcx]
+        je label_226
+        mov rax, 0
+label_213:
+        cmp rax, 1
+        je label_210
+        mov rax, 1
+label_209:
+        cmp rsi, rax
+        je label_187
+        mov rdi, r15
+        call Node_rot
+        mov rdi, r15
+        call Node_rot
+label_188:
+        jmp label_152
+label_187:
+        mov rdi, rdx
+        call Node_rot
+        mov rdi, r15
+        call Node_rot
+        jmp label_188
+label_210:
+        mov rax, 0
+        jmp label_209
+label_226:
+        mov rax, 1
+        jmp label_213
+label_222:
+        mov rax, 0
+        jmp label_213
+label_214:
+        cmp rcx, 0
+        je label_216
+        mov rax, 0
+        jmp label_213
+label_216:
+        mov rax, 1
+        jmp label_213
+label_191:
+        mov rsi, 0
+        jmp label_190
+label_207:
+        mov rax, 1
+        jmp label_194
+label_203:
+        mov rax, 0
+        jmp label_194
+label_195:
+        cmp rcx, 0
+        je label_197
+        mov rax, 0
+        jmp label_194
+label_197:
+        mov rax, 1
+        jmp label_194
+label_170:
+        mov rdi, r15
+        call Node_rot
+        jmp label_152
+label_185:
+        mov rax, 1
+        jmp label_172
+label_181:
+        mov rax, 0
+        jmp label_172
+label_173:
+        cmp rax, 0
+        je label_175
+        mov rax, 0
+        jmp label_172
+label_175:
+        mov rax, 1
+        jmp label_172
+label_154:
+        mov rdi, r15
+        call Node_push_up
+        mov rcx, qword [r15+11*8]
+        cmp rcx, 0
+        je label_229
+        mov rdi, qword [r15+11*8]
+        call Node_push_up
+label_229:
+        pop r15
         pop rbx
         mov rsp, rbp
         pop rbp
         ret 
-label_27:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rbx*8+8]
-        mov rdi, qword [rax]
-        call toString
-        mov rax, rax
-        mov rsi, S_0
-        mov rdi, rax
-        call string_strcat
-        mov rax, rax
-        mov rdi, rax
-        call print
-        inc rbx
-        jmp label_25
+label_168:
+        mov rax, 1
+        jmp label_155
+label_164:
+        mov rax, 0
+        jmp label_155
+label_156:
+        cmp rax, 0
+        je label_158
+        mov rax, 0
+        jmp label_155
+label_158:
+        mov rax, 1
+        jmp label_155
 
-win:
+Node_Node:
         push rbp
         mov rbp, rsp
         sub rsp, 0
-        mov rdi, 808
-        call malloc
-        mov rax, rax
-        mov qword [rax], 100
-        mov rdx, rax
-        mov rax, qword [rel V_now_0]
-        cmp rax, qword [rel V_h_0]
-        je label_32
-        mov rax, 0
-label_30:
         mov rsp, rbp
         pop rbp
         ret 
-label_32:
-        mov rdi, 0
-label_35:
-        cmp rdi, qword [rel V_now_0]
-        jl label_37
-        mov rsi, 0
-label_39:
-        mov rax, qword [rel V_now_0]
-        sub rax, 1
-        cmp rsi, rax
-        jl label_41
-        mov rsi, 0
-label_49:
-        cmp rsi, qword [rel V_now_0]
-        jl label_51
-        mov rax, 1
-        jmp label_30
-label_51:
-        lea rax, [rdx+rsi*8+8]
-        mov rcx, rsi
+
+splay_tree_build:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 16
+        push r12
+        push r13
+        push rbx
+        push r14
+        push r15
+        mov rbx, rdi
+        mov r14, rsi
+        mov r12, rdx
+        mov rax, rcx
+        mov qword [rbp+-8], rax
+        mov r13, r8
+        mov rax, qword [rbp+-8]
+        mov rax, rax
+        add rax, r13
+        mov rax, rax
+        mov rcx, 1
+        sar rax, cl
+        mov rax, rax
+        mov qword [rbp+-16], rax
+        mov rdi, 96
+        call malloc
+        mov rax, rax
+        mov r15, rax
+        mov rcx, qword [rel A_din_0]
+        mov rax, qword [rbp+-16]
+        lea rax, [rcx+rax*8+8]
+        mov rcx, qword [rel V_id_cnt_0]
         inc rcx
+        mov qword [rel V_id_cnt_0], rcx
+        mov rdx, qword [rel V_id_cnt_0]
+        mov rsi, qword [rax]
+        mov rdi, r15
+        call Node_init
+        mov rsi, r15
+        mov rdi, r14
+        call Node_copy
+        lea rax, [r14+11*8]
+        mov qword [rax], r12
+        mov rcx, qword [rbp+-8]
+        mov rax, qword [rbp+-16]
+        cmp rcx, rax
+        jl label_233
+label_234:
+        mov rax, qword [rbp+-16]
+        cmp r13, rax
+        jg label_235
+label_236:
+        mov rdi, r14
+        call Node_push_up
+        pop r15
+        pop r14
+        pop rbx
+        pop r13
+        pop r12
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_235:
+        lea rax, [r14+10*8]
         mov rax, qword [rax]
-        cmp rax, rcx
-        je label_54
-        mov rax, 0
-        jmp label_30
-label_54:
-        inc rsi
-        jmp label_49
-label_41:
-        mov rax, rsi
+        lea r15, [rax+1*8+8]
+        mov rdi, 96
+        call malloc
+        mov rax, rax
+        mov qword [r15], rax
+        lea rax, [r14+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+1*8+8]
+        mov rcx, qword [rel V_id_cnt_0]
+        inc rcx
+        mov qword [rel V_id_cnt_0], rcx
+        mov rdx, qword [rel V_id_cnt_0]
+        mov rsi, 0
+        mov rdi, qword [rax]
+        call Node_init
+        lea rax, [r14+10*8]
+        mov rax, qword [rax]
+        lea rsi, [rax+1*8+8]
+        mov rax, qword [rbp+-16]
+        mov rax, rax
         inc rax
-        mov rdi, rax
-label_43:
-        cmp rdi, qword [rel V_now_0]
-        jl label_45
-        inc rsi
-        jmp label_39
-label_45:
-        lea rcx, [rdx+rsi*8+8]
-        lea rax, [rdx+rdi*8+8]
-        mov rcx, qword [rcx]
-        cmp rcx, qword [rax]
-        jg label_47
-label_48:
-        inc rdi
-        jmp label_43
-label_47:
-        lea rax, [rdx+rsi*8+8]
+        mov r8, r13
+        mov rcx, rax
+        mov rdx, r14
+        mov rsi, qword [rsi]
+        mov rdi, rbx
+        call splay_tree_build
+        jmp label_236
+label_233:
+        lea rax, [r14+10*8]
         mov rax, qword [rax]
-        lea r8, [rdx+rsi*8+8]
-        lea rcx, [rdx+rdi*8+8]
+        lea r15, [rax+0*8+8]
+        mov rdi, 96
+        call malloc
+        mov rax, rax
+        mov qword [r15], rax
+        lea rax, [r14+10*8]
+        mov rax, qword [rax]
+        lea rcx, [rax+0*8+8]
+        mov rax, qword [rel V_id_cnt_0]
+        inc rax
+        mov qword [rel V_id_cnt_0], rax
+        mov rdx, qword [rel V_id_cnt_0]
+        mov rsi, 0
+        mov rdi, qword [rcx]
+        call Node_init
+        lea rax, [r14+10*8]
+        mov rax, qword [rax]
+        lea rsi, [rax+0*8+8]
+        mov rax, qword [rbp+-16]
+        mov rax, rax
+        sub rax, 1
+        mov r8, rax
+        mov rax, qword [rbp+-8]
+        mov rcx, rax
+        mov rdx, r14
+        mov rsi, qword [rsi]
+        mov rdi, rbx
+        call splay_tree_build
+        jmp label_234
+
+splay_tree_build_tree:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        push rbx
+        push r14
+        push r15
+        mov r14, rdi
+        mov rbx, rsi
+        mov r15, rdx
+        mov rdi, 96
+        call malloc
+        mov rax, rax
+        mov qword [r14+0*8], rax
+        mov rax, qword [rel V_id_cnt_0]
+        inc rax
+        mov qword [rel V_id_cnt_0], rax
+        mov rdx, qword [rel V_id_cnt_0]
+        mov rsi, 0
+        mov rdi, qword [r14+0*8]
+        call Node_init
+        mov r8, r15
+        mov rcx, rbx
+        mov rdx, 0
+        mov rsi, qword [r14+0*8]
+        mov rdi, r14
+        call splay_tree_build
+        pop r15
+        pop r14
+        pop rbx
+        mov rsp, rbp
+        pop rbp
+        ret 
+
+splay_tree_find:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        mov rax, rdi
+        mov rdi, rsi
+        mov rsi, qword [rax+0*8]
+        mov r8, 0
+        lea rax, [rsi+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+0*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_243
+        lea rax, [rsi+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+0*8+8]
+        mov rax, qword [rax]
+        lea rax, [rax+2*8]
+        mov rax, qword [rax]
+        inc rax
+        mov rax, rax
+label_242:
+label_244:
+        mov rcx, r8
+        add rcx, rax
+        cmp rcx, rdi
+        je label_246
+        mov rcx, r8
+        add rcx, rax
+        cmp rdi, rcx
+        jl label_247
+        mov rcx, r8
+        add rcx, rax
+        mov r8, rcx
+        lea rax, [rsi+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+1*8+8]
+        mov rsi, qword [rax]
+label_248:
+        mov r9, rsi
+        mov rax, qword [r9+4*8]
+        cmp rax, 1
+        je label_251
+label_252:
+        mov rax, qword [r9+6*8]
+        cmp rax, 1
+        je label_263
+label_264:
+        lea rax, [rsi+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+0*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_274
+        lea rax, [rsi+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+0*8+8]
+        mov rax, qword [rax]
+        lea rax, [rax+2*8]
+        mov rax, qword [rax]
+        inc rax
+        mov rax, rax
+label_273:
+        jmp label_244
+label_274:
+        mov rax, 1
+        jmp label_273
+label_263:
+        mov rcx, 0
+label_265:
+        cmp rcx, 2
+        jl label_267
+        mov qword [r9+6*8], 0
+        jmp label_264
+label_267:
+        mov rax, qword [r9+10*8]
+        lea rax, [rax+rcx*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_270
+        mov rax, qword [r9+10*8]
+        lea rax, [rax+rcx*8+8]
+        mov r11, qword [rax]
+        mov rax, qword [r11+10*8]
+        lea rax, [rax+0*8+8]
+        mov r10, qword [rax]
+        mov rax, qword [r11+10*8]
+        lea rax, [rax+0*8+8]
+        mov rdx, qword [r11+10*8]
+        lea rdx, [rdx+1*8+8]
+        mov rdx, qword [rdx]
+        mov qword [rax], rdx
+        mov rax, qword [r11+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], r10
+        mov rax, qword [r11+7*8]
+        mov rdx, qword [r11+8*8]
+        mov qword [r11+7*8], rdx
+        mov qword [r11+8*8], rax
+        mov rax, qword [r11+6*8]
+        xor rax, 1
+        mov qword [r11+6*8], rax
+label_270:
+        inc rcx
+        jmp label_265
+label_251:
+        mov rcx, 0
+label_253:
+        cmp rcx, 2
+        jl label_255
+        mov qword [r9+4*8], 0
+        jmp label_252
+label_255:
+        mov rax, qword [r9+10*8]
+        lea rax, [rax+rcx*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_258
+        mov rax, qword [r9+10*8]
+        lea rax, [rax+rcx*8+8]
+        mov r11, qword [rax]
+        mov r10, qword [r9+5*8]
+        mov qword [r11+1*8], r10
+        mov rax, qword [r11+2*8]
+        imul r10
+        mov rax, rax
+        mov qword [r11+3*8], rax
+        cmp r10, 0
+        jl label_262
+        mov rax, qword [r11+3*8]
+        mov qword [r11+7*8], rax
+        mov rax, qword [r11+3*8]
+        mov qword [r11+8*8], rax
+        mov rax, qword [r11+3*8]
+        mov qword [r11+9*8], rax
+label_261:
+        mov qword [r11+4*8], 1
+        mov qword [r11+5*8], r10
+label_258:
+        inc rcx
+        jmp label_253
+label_262:
+        mov qword [r11+7*8], r10
+        mov qword [r11+8*8], r10
+        mov qword [r11+9*8], r10
+        jmp label_261
+label_247:
+        lea rax, [rsi+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+0*8+8]
+        mov rsi, qword [rax]
+        jmp label_248
+label_246:
+        mov rax, rsi
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_243:
+        mov rax, 1
+        jmp label_242
+
+splay_tree_dfs:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 64
+        push r12
+        push r13
+        push r14
+        push rbx
+        push r15
+        mov rcx, rdi
+        mov qword [rbp+-24], rcx
+        mov rcx, rsi
+        mov qword [rbp+-32], rcx
+        mov r15, 0
+label_277:
+        cmp r15, 2
+        jl label_279
+        pop r15
+        pop rbx
+        pop r14
+        pop r13
+        pop r12
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_279:
+        mov rcx, qword [rbp+-32]
+        lea rcx, [rcx+10*8]
         mov rcx, qword [rcx]
-        mov qword [r8], rcx
-        lea rcx, [rdx+rdi*8+8]
+        lea rcx, [rcx+r15*8+8]
+        mov rcx, qword [rcx]
+        cmp rcx, 0
+        je label_282
+        mov rcx, qword [rbp+-32]
+        lea rcx, [rcx+10*8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+r15*8+8]
+        mov rdx, qword [rbp+-24]
+        mov rbx, rdx
+        mov rcx, qword [rcx]
+        mov qword [rbp+-40], rcx
+        mov rcx, 0
+        mov qword [rbp+-48], rcx
+label_284:
+        mov rcx, qword [rbp+-48]
+        cmp rcx, 2
+        jl label_286
+label_282:
+        inc r15
+        jmp label_277
+label_286:
+        mov rcx, qword [rbp+-40]
+        lea rcx, [rcx+10*8]
+        mov rdx, qword [rcx]
+        mov rcx, qword [rbp+-48]
+        lea rcx, [rdx+rcx*8+8]
+        mov rcx, qword [rcx]
+        cmp rcx, 0
+        je label_289
+        mov rcx, qword [rbp+-40]
+        lea rcx, [rcx+10*8]
+        mov rdx, qword [rcx]
+        mov rcx, qword [rbp+-48]
+        lea rcx, [rdx+rcx*8+8]
+        mov r13, rbx
+        mov rcx, qword [rcx]
+        mov qword [rbp+-16], rcx
+        mov r14, 0
+label_291:
+        cmp r14, 2
+        jl label_293
+label_289:
+        mov rcx, qword [rbp+-48]
+        inc rcx
+        mov qword [rbp+-48], rcx
+        jmp label_284
+label_293:
+        mov rcx, qword [rbp+-16]
+        lea rcx, [rcx+10*8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+r14*8+8]
+        mov rcx, qword [rcx]
+        cmp rcx, 0
+        je label_296
+        mov rcx, qword [rbp+-16]
+        lea rcx, [rcx+10*8]
+        mov rcx, qword [rcx]
+        lea rcx, [rcx+r14*8+8]
+        mov r12, r13
+        mov rcx, qword [rcx]
+        mov qword [rbp+-8], rcx
+        mov rcx, 0
+        mov qword [rbp+-56], rcx
+label_298:
+        mov rcx, qword [rbp+-56]
+        cmp rcx, 2
+        jl label_300
+label_296:
+        inc r14
+        jmp label_291
+label_300:
+        mov rcx, qword [rbp+-8]
+        lea rcx, [rcx+10*8]
+        mov rdx, qword [rcx]
+        mov rcx, qword [rbp+-56]
+        lea rcx, [rdx+rcx*8+8]
+        mov rcx, qword [rcx]
+        cmp rcx, 0
+        je label_303
+        mov rax, qword [rbp+-8]
+        lea rax, [rax+10*8]
+        mov rax, qword [rax]
+        mov rcx, qword [rbp+-56]
+        lea rax, [rax+rcx*8+8]
+        mov rsi, qword [rax]
+        mov rdi, r12
+        call splay_tree_dfs
+label_303:
+        mov rcx, qword [rbp+-56]
+        inc rcx
+        mov qword [rbp+-56], rcx
+        jmp label_298
+
+splay_tree_del:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 48
+        push r12
+        push r13
+        push rbx
+        push r14
+        push r15
+        mov r15, rdi
+        mov rbx, rsi
+        mov rax, rdx
+        mov rax, rax
+        inc rax
+        mov rsi, rax
+        mov rdi, r15
+        call splay_tree_find
+        mov rax, rax
+        mov rax, rax
+        mov qword [rbp+-40], rax
+        mov rsi, 0
+        mov rax, qword [rbp+-40]
+        mov rdi, rax
+        call Node_rotto
+        mov rax, qword [rbp+-40]
+        mov qword [r15+0*8], rax
+        mov rax, rbx
+        sub rax, 1
+        mov rsi, rax
+        mov rdi, r15
+        call splay_tree_find
+        mov rax, rax
+        mov rax, rax
+        mov qword [rbp+-40], rax
+        mov rsi, qword [r15+0*8]
+        mov rax, qword [rbp+-40]
+        mov rdi, rax
+        call Node_rotto
+        mov rax, qword [rbp+-40]
+        lea rax, [rax+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+1*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_307
+        mov rax, qword [rbp+-40]
+        lea rax, [rax+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+1*8+8]
+        mov rbx, r15
+        mov r14, qword [rax]
+        mov rax, 0
+        mov qword [rbp+-8], rax
+label_309:
+        mov rax, qword [rbp+-8]
+        cmp rax, 2
+        jl label_311
+label_307:
+        mov rax, qword [rbp+-40]
+        lea rax, [rax+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], 0
+        mov rsi, 0
+        mov rax, qword [rbp+-40]
+        mov rdi, rax
+        call Node_rotto
+        mov rcx, qword [rbp+-40]
+        mov qword [r15+0*8], rcx
+        pop r15
+        pop r14
+        pop rbx
+        pop r13
+        pop r12
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_311:
+        lea rax, [r14+10*8]
+        mov rax, qword [rax]
+        mov rcx, qword [rbp+-8]
+        lea rax, [rax+rcx*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_314
+        lea rax, [r14+10*8]
+        mov rcx, qword [rax]
+        mov rax, qword [rbp+-8]
+        lea rax, [rcx+rax*8+8]
+        mov r13, rbx
+        mov rax, qword [rax]
+        mov qword [rbp+-32], rax
+        mov rax, 0
+        mov qword [rbp+-24], rax
+label_316:
+        mov rax, qword [rbp+-24]
+        cmp rax, 2
+        jl label_318
+label_314:
+        mov rax, qword [rbp+-8]
+        inc rax
+        mov qword [rbp+-8], rax
+        jmp label_309
+label_318:
+        mov rax, qword [rbp+-32]
+        lea rax, [rax+10*8]
+        mov rax, qword [rax]
+        mov rcx, qword [rbp+-24]
+        lea rax, [rax+rcx*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_321
+        mov rax, qword [rbp+-32]
+        lea rax, [rax+10*8]
+        mov rax, qword [rax]
+        mov rcx, qword [rbp+-24]
+        lea rax, [rax+rcx*8+8]
+        mov r12, r13
+        mov rax, qword [rax]
+        mov qword [rbp+-48], rax
+        mov rax, 0
+        mov qword [rbp+-16], rax
+label_323:
+        mov rax, qword [rbp+-16]
+        cmp rax, 2
+        jl label_325
+label_321:
+        mov rax, qword [rbp+-24]
+        inc rax
+        mov qword [rbp+-24], rax
+        jmp label_316
+label_325:
+        mov rax, qword [rbp+-48]
+        lea rax, [rax+10*8]
+        mov rax, qword [rax]
+        mov rcx, qword [rbp+-16]
+        lea rax, [rax+rcx*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_328
+        mov rax, qword [rbp+-48]
+        lea rax, [rax+10*8]
+        mov rcx, qword [rax]
+        mov rax, qword [rbp+-16]
+        lea rax, [rcx+rax*8+8]
+        mov rsi, qword [rax]
+        mov rdi, r12
+        call splay_tree_dfs
+label_328:
+        mov rax, qword [rbp+-16]
+        inc rax
+        mov qword [rbp+-16], rax
+        jmp label_323
+
+splay_tree_change:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        push r13
+        push r14
+        push rbx
+        push r15
+        mov r15, rdi
+        mov r13, rsi
+        mov rax, rdx
+        mov r14, rcx
+        mov rax, rax
+        inc rax
+        mov rsi, rax
+        mov rdi, r15
+        call splay_tree_find
+        mov rax, rax
+        mov rbx, rax
+        mov rsi, 0
+        mov rdi, rbx
+        call Node_rotto
+        mov qword [r15+0*8], rbx
+        mov rax, r13
+        sub rax, 1
+        mov rsi, rax
+        mov rdi, r15
+        call splay_tree_find
+        mov rax, rax
+        mov rbx, rax
+        mov rsi, qword [r15+0*8]
+        mov rdi, rbx
+        call Node_rotto
+        lea rax, [rbx+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+1*8+8]
+        mov rbx, qword [rax]
+        mov rcx, rbx
+        mov rax, qword [rcx+4*8]
+        cmp rax, 1
+        je label_332
+label_333:
+        mov rax, qword [rcx+6*8]
+        cmp rax, 1
+        je label_344
+label_345:
+        mov rcx, rbx
+        mov rsi, r14
+        mov qword [rcx+1*8], rsi
+        mov rax, qword [rcx+2*8]
+        imul rsi
+        mov rax, rax
+        mov qword [rcx+3*8], rax
+        cmp rsi, 0
+        jl label_356
+        mov rax, qword [rcx+3*8]
+        mov qword [rcx+7*8], rax
+        mov rax, qword [rcx+3*8]
+        mov qword [rcx+8*8], rax
+        mov rax, qword [rcx+3*8]
+        mov qword [rcx+9*8], rax
+label_355:
+        mov qword [rcx+4*8], 1
+        mov qword [rcx+5*8], rsi
+        mov rcx, rbx
+        mov rax, qword [rcx+4*8]
+        cmp rax, 1
+        je label_358
+label_359:
+        mov rax, qword [rcx+6*8]
+        cmp rax, 1
+        je label_370
+label_371:
+        mov rsi, 0
+        mov rdi, rbx
+        call Node_rotto
+        mov qword [r15+0*8], rbx
+        pop r15
+        pop rbx
+        pop r14
+        pop r13
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_370:
+        mov rsi, 0
+label_372:
+        cmp rsi, 2
+        jl label_374
+        mov qword [rcx+6*8], 0
+        jmp label_371
+label_374:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_377
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+0*8+8]
+        mov r8, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rdx, [rax+0*8+8]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov rax, qword [rax]
+        mov qword [rdx], rax
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], r8
+        mov rdx, qword [rdi+7*8]
+        mov rax, qword [rdi+8*8]
+        mov qword [rdi+7*8], rax
+        mov qword [rdi+8*8], rdx
+        mov rax, qword [rdi+6*8]
+        xor rax, 1
+        mov qword [rdi+6*8], rax
+label_377:
+        inc rsi
+        jmp label_372
+label_358:
+        mov rsi, 0
+label_360:
+        cmp rsi, 2
+        jl label_362
+        mov qword [rcx+4*8], 0
+        jmp label_359
+label_362:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_365
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov r8, qword [rcx+5*8]
+        mov qword [rdi+1*8], r8
+        mov rax, qword [rdi+2*8]
+        imul r8
+        mov rax, rax
+        mov qword [rdi+3*8], rax
+        cmp r8, 0
+        jl label_369
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+7*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+8*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+9*8], rax
+label_368:
+        mov qword [rdi+4*8], 1
+        mov qword [rdi+5*8], r8
+label_365:
+        inc rsi
+        jmp label_360
+label_369:
+        mov qword [rdi+7*8], r8
+        mov qword [rdi+8*8], r8
+        mov qword [rdi+9*8], r8
+        jmp label_368
+label_356:
+        mov qword [rcx+7*8], rsi
+        mov qword [rcx+8*8], rsi
+        mov qword [rcx+9*8], rsi
+        jmp label_355
+label_344:
+        mov rsi, 0
+label_346:
+        cmp rsi, 2
+        jl label_348
+        mov qword [rcx+6*8], 0
+        jmp label_345
+label_348:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_351
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+0*8+8]
+        mov r8, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rdx, [rax+0*8+8]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov rax, qword [rax]
+        mov qword [rdx], rax
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], r8
+        mov rdx, qword [rdi+7*8]
+        mov rax, qword [rdi+8*8]
+        mov qword [rdi+7*8], rax
+        mov qword [rdi+8*8], rdx
+        mov rax, qword [rdi+6*8]
+        xor rax, 1
+        mov qword [rdi+6*8], rax
+label_351:
+        inc rsi
+        jmp label_346
+label_332:
+        mov rsi, 0
+label_334:
+        cmp rsi, 2
+        jl label_336
+        mov qword [rcx+4*8], 0
+        jmp label_333
+label_336:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_339
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov r8, qword [rcx+5*8]
+        mov qword [rdi+1*8], r8
+        mov rax, qword [rdi+2*8]
+        imul r8
+        mov rax, rax
+        mov qword [rdi+3*8], rax
+        cmp r8, 0
+        jl label_343
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+7*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+8*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+9*8], rax
+label_342:
+        mov qword [rdi+4*8], 1
+        mov qword [rdi+5*8], r8
+label_339:
+        inc rsi
+        jmp label_334
+label_343:
+        mov qword [rdi+7*8], r8
+        mov qword [rdi+8*8], r8
+        mov qword [rdi+9*8], r8
+        jmp label_342
+
+splay_tree_rol:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        push r14
+        push rbx
+        push r15
+        mov r15, rdi
+        mov r14, rsi
+        mov rax, rdx
+        mov rax, rax
+        inc rax
+        mov rsi, rax
+        mov rdi, r15
+        call splay_tree_find
+        mov rax, rax
+        mov rbx, rax
+        mov rsi, 0
+        mov rdi, rbx
+        call Node_rotto
+        mov qword [r15+0*8], rbx
+        mov rax, r14
+        sub rax, 1
+        mov rsi, rax
+        mov rdi, r15
+        call splay_tree_find
+        mov rax, rax
+        mov rbx, rax
+        mov rsi, qword [r15+0*8]
+        mov rdi, rbx
+        call Node_rotto
+        lea rax, [rbx+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+1*8+8]
+        mov rbx, qword [rax]
+        mov rcx, rbx
+        mov rax, qword [rcx+4*8]
+        cmp rax, 1
+        je label_382
+label_383:
+        mov rax, qword [rcx+6*8]
+        cmp rax, 1
+        je label_394
+label_395:
+        mov rcx, rbx
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+0*8+8]
+        mov rsi, qword [rax]
+        mov rax, qword [rcx+10*8]
+        lea rdx, [rax+0*8+8]
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+1*8+8]
+        mov rax, qword [rax]
+        mov qword [rdx], rax
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], rsi
+        mov rax, qword [rcx+7*8]
+        mov rdx, qword [rcx+8*8]
+        mov qword [rcx+7*8], rdx
+        mov qword [rcx+8*8], rax
+        mov rax, qword [rcx+6*8]
+        xor rax, 1
+        mov qword [rcx+6*8], rax
+        mov rcx, rbx
+        mov rax, qword [rcx+4*8]
+        cmp rax, 1
+        je label_405
+label_406:
+        mov rax, qword [rcx+6*8]
+        cmp rax, 1
+        je label_417
+label_418:
+        mov rsi, 0
+        mov rdi, rbx
+        call Node_rotto
+        mov qword [r15+0*8], rbx
+        pop r15
+        pop rbx
+        pop r14
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_417:
+        mov rsi, 0
+label_419:
+        cmp rsi, 2
+        jl label_421
+        mov qword [rcx+6*8], 0
+        jmp label_418
+label_421:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_424
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+0*8+8]
+        mov r8, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+0*8+8]
+        mov rdx, qword [rdi+10*8]
+        lea rdx, [rdx+1*8+8]
+        mov rdx, qword [rdx]
+        mov qword [rax], rdx
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], r8
+        mov rdx, qword [rdi+7*8]
+        mov rax, qword [rdi+8*8]
+        mov qword [rdi+7*8], rax
+        mov qword [rdi+8*8], rdx
+        mov rax, qword [rdi+6*8]
+        xor rax, 1
+        mov qword [rdi+6*8], rax
+label_424:
+        inc rsi
+        jmp label_419
+label_405:
+        mov rsi, 0
+label_407:
+        cmp rsi, 2
+        jl label_409
+        mov qword [rcx+4*8], 0
+        jmp label_406
+label_409:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_412
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov r8, qword [rcx+5*8]
+        mov qword [rdi+1*8], r8
+        mov rax, qword [rdi+2*8]
+        imul r8
+        mov rax, rax
+        mov qword [rdi+3*8], rax
+        cmp r8, 0
+        jl label_416
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+7*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+8*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+9*8], rax
+label_415:
+        mov qword [rdi+4*8], 1
+        mov qword [rdi+5*8], r8
+label_412:
+        inc rsi
+        jmp label_407
+label_416:
+        mov qword [rdi+7*8], r8
+        mov qword [rdi+8*8], r8
+        mov qword [rdi+9*8], r8
+        jmp label_415
+label_394:
+        mov rsi, 0
+label_396:
+        cmp rsi, 2
+        jl label_398
+        mov qword [rcx+6*8], 0
+        jmp label_395
+label_398:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_401
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+0*8+8]
+        mov r8, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rdx, [rax+0*8+8]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov rax, qword [rax]
+        mov qword [rdx], rax
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], r8
+        mov rdx, qword [rdi+7*8]
+        mov rax, qword [rdi+8*8]
+        mov qword [rdi+7*8], rax
+        mov qword [rdi+8*8], rdx
+        mov rax, qword [rdi+6*8]
+        xor rax, 1
+        mov qword [rdi+6*8], rax
+label_401:
+        inc rsi
+        jmp label_396
+label_382:
+        mov rsi, 0
+label_384:
+        cmp rsi, 2
+        jl label_386
+        mov qword [rcx+4*8], 0
+        jmp label_383
+label_386:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_389
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov r8, qword [rcx+5*8]
+        mov qword [rdi+1*8], r8
+        mov rax, qword [rdi+2*8]
+        imul r8
+        mov rax, rax
+        mov qword [rdi+3*8], rax
+        cmp r8, 0
+        jl label_393
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+7*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+8*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+9*8], rax
+label_392:
+        mov qword [rdi+4*8], 1
+        mov qword [rdi+5*8], r8
+label_389:
+        inc rsi
+        jmp label_384
+label_393:
+        mov qword [rdi+7*8], r8
+        mov qword [rdi+8*8], r8
+        mov qword [rdi+9*8], r8
+        jmp label_392
+
+splay_tree_getsum:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        push rbx
+        push r14
+        push r15
+        mov rbx, rdi
+        mov r15, rsi
+        mov rax, rdx
+        mov rax, rax
+        inc rax
+        mov rsi, rax
+        mov rdi, rbx
+        call splay_tree_find
+        mov rax, rax
+        mov r14, rax
+        mov rsi, 0
+        mov rdi, r14
+        call Node_rotto
+        mov qword [rbx+0*8], r14
+        mov rax, r15
+        sub rax, 1
+        mov rsi, rax
+        mov rdi, rbx
+        call splay_tree_find
+        mov rax, rax
+        mov r14, rax
+        mov rsi, qword [rbx+0*8]
+        mov rdi, r14
+        call Node_rotto
+        lea rax, [r14+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+1*8+8]
+        mov r14, qword [rax]
+        mov rcx, r14
+        mov rax, qword [rcx+4*8]
+        cmp rax, 1
+        je label_429
+label_430:
+        mov rax, qword [rcx+6*8]
+        cmp rax, 1
+        je label_441
+label_442:
+        lea rax, [r14+3*8]
+        mov r15, qword [rax]
+        mov rsi, 0
+        mov rdi, r14
+        call Node_rotto
+        mov qword [rbx+0*8], r14
+        mov rax, r15
+        pop r15
+        pop r14
+        pop rbx
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_441:
+        mov rsi, 0
+label_443:
+        cmp rsi, 2
+        jl label_445
+        mov qword [rcx+6*8], 0
+        jmp label_442
+label_445:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_448
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+0*8+8]
+        mov r8, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rdx, [rax+0*8+8]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov rax, qword [rax]
+        mov qword [rdx], rax
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], r8
+        mov rax, qword [rdi+7*8]
+        mov rdx, qword [rdi+8*8]
+        mov qword [rdi+7*8], rdx
+        mov qword [rdi+8*8], rax
+        mov rax, qword [rdi+6*8]
+        xor rax, 1
+        mov qword [rdi+6*8], rax
+label_448:
+        inc rsi
+        jmp label_443
+label_429:
+        mov rsi, 0
+label_431:
+        cmp rsi, 2
+        jl label_433
+        mov qword [rcx+4*8], 0
+        jmp label_430
+label_433:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_436
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov r8, qword [rcx+5*8]
+        mov qword [rdi+1*8], r8
+        mov rax, qword [rdi+2*8]
+        imul r8
+        mov rax, rax
+        mov qword [rdi+3*8], rax
+        cmp r8, 0
+        jl label_440
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+7*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+8*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+9*8], rax
+label_439:
+        mov qword [rdi+4*8], 1
+        mov qword [rdi+5*8], r8
+label_436:
+        inc rsi
+        jmp label_431
+label_440:
+        mov qword [rdi+7*8], r8
+        mov qword [rdi+8*8], r8
+        mov qword [rdi+9*8], r8
+        jmp label_439
+
+splay_tree_getMax:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        mov rsi, rdi
+        mov rdi, qword [rsi+0*8]
+        mov rax, qword [rdi+4*8]
+        cmp rax, 1
+        je label_453
+label_454:
+        mov rax, qword [rdi+6*8]
+        cmp rax, 1
+        je label_465
+label_466:
+        mov rax, qword [rsi+0*8]
+        lea rax, [rax+9*8]
+        mov rax, qword [rax]
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_465:
+        mov r8, 0
+label_467:
+        cmp r8, 2
+        jl label_469
+        mov qword [rdi+6*8], 0
+        jmp label_466
+label_469:
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+r8*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_472
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+r8*8+8]
+        mov r9, qword [rax]
+        mov rax, qword [r9+10*8]
+        lea rax, [rax+0*8+8]
+        mov rdx, qword [rax]
+        mov rax, qword [r9+10*8]
+        lea rcx, [rax+0*8+8]
+        mov rax, qword [r9+10*8]
+        lea rax, [rax+1*8+8]
+        mov rax, qword [rax]
         mov qword [rcx], rax
-        jmp label_48
-label_37:
-        lea rax, [rdx+rdi*8+8]
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rdi*8+8]
-        mov rcx, qword [rcx]
-        mov qword [rax], rcx
-        inc rdi
-        jmp label_35
+        mov rax, qword [r9+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], rdx
+        mov rcx, qword [r9+7*8]
+        mov rax, qword [r9+8*8]
+        mov qword [r9+7*8], rax
+        mov qword [r9+8*8], rcx
+        mov rax, qword [r9+6*8]
+        xor rax, 1
+        mov qword [r9+6*8], rax
+label_472:
+        inc r8
+        jmp label_467
+label_453:
+        mov r8, 0
+label_455:
+        cmp r8, 2
+        jl label_457
+        mov qword [rdi+4*8], 0
+        jmp label_454
+label_457:
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+r8*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_460
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+r8*8+8]
+        mov r9, qword [rax]
+        mov rcx, qword [rdi+5*8]
+        mov qword [r9+1*8], rcx
+        mov rax, qword [r9+2*8]
+        imul rcx
+        mov rax, rax
+        mov qword [r9+3*8], rax
+        cmp rcx, 0
+        jl label_464
+        mov rax, qword [r9+3*8]
+        mov qword [r9+7*8], rax
+        mov rax, qword [r9+3*8]
+        mov qword [r9+8*8], rax
+        mov rax, qword [r9+3*8]
+        mov qword [r9+9*8], rax
+label_463:
+        mov qword [r9+4*8], 1
+        mov qword [r9+5*8], rcx
+label_460:
+        inc r8
+        jmp label_455
+label_464:
+        mov qword [r9+7*8], rcx
+        mov qword [r9+8*8], rcx
+        mov qword [r9+9*8], rcx
+        jmp label_463
+
+splay_tree_splay_tree:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        mov rcx, rdi
+        mov qword [rcx+0*8], 0
+        mov rsp, rbp
+        pop rbp
+        ret 
+
+equ:
+        push rbp
+        mov rbp, rsp
+        sub rsp, 0
+        mov rax, rdi
+        mov rcx, rsi
+        cmp rax, 0
+        je label_478
+        cmp rcx, 0
+        je label_486
+        lea rax, [rax+0*8]
+        lea rcx, [rcx+0*8]
+        mov rax, qword [rax]
+        cmp rax, qword [rcx]
+        je label_490
+        mov rax, 0
+label_477:
+        mov rsp, rbp
+        pop rbp
+        ret 
+label_490:
+        mov rax, 1
+        jmp label_477
+label_486:
+        mov rax, 0
+        jmp label_477
+label_478:
+        cmp rcx, 0
+        je label_480
+        mov rax, 0
+        jmp label_477
+label_480:
+        mov rax, 1
+        jmp label_477
 
 merge:
         push rbp
         mov rbp, rsp
         sub rsp, 0
+        push r13
+        push r14
+        push rbx
+        push r15
+        mov rbx, rdi
+        mov r15, rsi
+        mov r14, rdx
+        mov rax, rbx
+        inc rax
+        mov rsi, rax
+        mov rdi, r15
+        call splay_tree_find
+        mov rax, rax
+        mov r13, rax
         mov rsi, 0
-label_61:
-        cmp rsi, qword [rel V_now_0]
-        jl label_63
+        mov rdi, r13
+        call Node_rotto
+        lea rax, [r15+0*8]
+        mov qword [rax], r13
+        mov rsi, rbx
+        mov rdi, r15
+        call splay_tree_find
+        mov rax, rax
+        mov r13, rax
+        lea rax, [r15+0*8]
+        mov rsi, qword [rax]
+        mov rdi, r13
+        call Node_rotto
+        lea rax, [r13+10*8]
+        mov rax, qword [rax]
+        lea rcx, [rax+1*8+8]
+        lea rax, [r14+0*8]
+        mov rax, qword [rax]
+        mov qword [rcx], rax
+        lea rax, [r14+0*8]
+        mov rax, qword [rax]
+        lea rax, [rax+11*8]
+        mov qword [rax], r13
         mov rsi, 0
-label_74:
-        cmp rsi, qword [rel V_now_0]
-        jl label_76
-label_75:
+        mov rdi, r13
+        call Node_rotto
+        lea rcx, [r15+0*8]
+        mov qword [rcx], r13
+        pop r15
+        pop rbx
+        pop r14
+        pop r13
         mov rsp, rbp
         pop rbp
         ret 
-label_76:
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rsi*8+8]
-        mov rcx, qword [rcx]
-        cmp rcx, 0
-        je label_78
-        inc rsi
-        jmp label_74
-label_78:
-        mov qword [rel V_now_0], rsi
-        jmp label_75
-label_63:
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rsi*8+8]
-        mov rcx, qword [rcx]
-        cmp rcx, 0
-        je label_65
-label_66:
-        inc rsi
-        jmp label_61
-label_65:
-        mov rcx, rsi
-        inc rcx
-        mov rdx, rcx
-label_67:
-        cmp rdx, qword [rel V_now_0]
-        jl label_69
-label_68:
-        jmp label_66
-label_69:
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rdx*8+8]
-        mov rcx, qword [rcx]
-        cmp rcx, 0
-        je label_72
-        mov rdi, rsi
-        mov rdx, rdx
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rdi*8+8]
-        mov r8, qword [rcx]
-        mov rcx, qword [rel A_a_0]
-        lea rdi, [rcx+rdi*8+8]
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rdx*8+8]
-        mov rcx, qword [rcx]
-        mov qword [rdi], rcx
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rdx*8+8]
-        mov qword [rcx], r8
-        jmp label_68
-label_72:
-        inc rdx
-        jmp label_67
-
-move:
-        push rbp
-        mov rbp, rsp
-        sub rsp, 0
-        mov rsi, 0
-label_82:
-        cmp rsi, qword [rel V_now_0]
-        jl label_84
-        mov rdx, qword [rel A_a_0]
-        mov rcx, qword [rel V_now_0]
-        lea rcx, [rdx+rcx*8+8]
-        mov rdx, qword [rel V_now_0]
-        mov qword [rcx], rdx
-        mov rcx, qword [rel V_now_0]
-        inc rcx
-        mov qword [rel V_now_0], rcx
-        mov rsp, rbp
-        pop rbp
-        ret 
-label_84:
-        mov rcx, qword [rel A_a_0]
-        lea rcx, [rcx+rsi*8+8]
-        mov rdx, qword [rcx]
-        sub rdx, 1
-        mov qword [rcx], rdx
-        mov rcx, rsi
-        inc rcx
-        mov rsi, rcx
-        jmp label_82
 
 main:
         push rbp
         mov rbp, rsp
-        sub rsp, 0
-        push r14
+        sub rsp, 16
         push r12
+        push r13
+        push r14
         push rbx
+        push r15
         call ___init
-        mov r12, 0
-        mov r14, 0
-        mov rbx, 0
-        mov qword [rel V_n_0], 210
-        mov qword [rel V_h_0], 0
-        mov rdi, 808
+        call getInt
+        mov rax, rax
+        mov qword [rel V_n_0], rax
+        call getInt
+        mov rax, rax
+        mov qword [rel V_m_0], rax
+        mov rdi, 8
         call malloc
         mov rax, rax
-        mov qword [rax], 100
-        mov qword [rel A_a_0], rax
-        mov rax, qword [rel V_M_0]
-        cdq 
-        mov rcx, qword [rel V_A_0]
-        idiv rcx
+        mov r13, rax
+        mov qword [r13+0*8], 0
+        mov qword [rel A_sp_0], rax
+        mov rdi, 8
+        call malloc
         mov rax, rax
-        mov qword [rel V_Q_0], rax
-        mov rax, qword [rel V_M_0]
-        cdq 
-        mov rcx, qword [rel V_A_0]
-        idiv rcx
-        mov rax, rdx
-        mov qword [rel V_R_0], rax
-        mov rsi, qword [rel V_n_0]
-label_90:
-        mov rax, qword [rel V_h_0]
-        cmp rax, rsi
-        jg label_91
-        mov rcx, qword [rel V_h_0]
+        mov r13, rax
+        mov qword [r13+0*8], 0
+        mov qword [rel A_dintree_0], rax
+        mov rax, qword [rel A_din_0]
+        lea rcx, [rax+0*8+8]
+        mov rax, qword [rel V_INF_0]
+        neg rax
+        mov qword [rcx], rax
+        mov rcx, qword [rel V_n_0]
         inc rcx
-        mov rax, qword [rel V_h_0]
-        imul rcx
+        mov rax, qword [rel A_din_0]
+        lea rax, [rax+rcx*8+8]
+        mov rcx, qword [rel V_INF_0]
+        neg rcx
+        mov qword [rax], rcx
+        mov rbx, 1
+label_498:
+        cmp rbx, qword [rel V_n_0]
+        jg label_499
+        mov rax, qword [rel A_din_0]
+        lea r15, [rax+rbx*8+8]
+        call getInt
         mov rax, rax
-        mov rax, rax
-        mov rcx, 1
-        sar rax, cl
-        cmp rsi, rax
-        je label_94
-        mov rax, qword [rel V_h_0]
+        mov qword [r15], rax
+        inc rbx
+        jmp label_498
+label_499:
+        mov rax, qword [rel V_n_0]
         inc rax
-        mov qword [rel V_h_0], rax
-        jmp label_90
-label_94:
-        mov rax, 1
-label_89:
+        mov r13, qword [rel A_sp_0]
+        mov r12, 0
+        mov r15, rax
+        mov rdi, 96
+        call malloc
+        mov rax, rax
+        mov qword [r13+0*8], rax
+        mov rax, qword [rel V_id_cnt_0]
+        inc rax
+        mov qword [rel V_id_cnt_0], rax
+        mov rdx, qword [rel V_id_cnt_0]
+        mov rsi, 0
+        mov rdi, qword [r13+0*8]
+        call Node_init
+        mov r8, r15
+        mov rcx, r12
+        mov rdx, 0
+        mov rsi, qword [r13+0*8]
+        mov rdi, r13
+        call splay_tree_build
+        mov rbx, 1
+label_503:
+        cmp rbx, qword [rel V_m_0]
+        jg label_504
+        call getString
+        mov rax, rax
+        mov r14, rax
+        mov rsi, 0
+        mov rdi, r14
+        call string_ord
+        mov r15, rax
+        mov rsi, 0
+        mov rdi, qword [rel A_char_ID_0]
+        call string_ord
+        mov rax, rax
+        cmp r15, rax
+        je label_507
+label_508:
+        mov rsi, 0
+        mov rdi, r14
+        call string_ord
+        mov r15, rax
+        mov rsi, 1
+        mov rdi, qword [rel A_char_ID_0]
+        call string_ord
+        mov rax, rax
+        cmp r15, rax
+        je label_514
+label_515:
+        mov rsi, 0
+        mov rdi, r14
+        call string_ord
+        mov rax, rax
+        cmp rax, 82
+        je label_516
+label_517:
+        mov rsi, 0
+        mov rdi, r14
+        call string_ord
+        mov rax, rax
+        cmp rax, 71
+        je label_518
+label_519:
+        mov rsi, 0
+        mov rdi, r14
+        call string_ord
+        mov rax, rax
+        cmp rax, 77
+        je label_546
+label_547:
+        inc rbx
+        jmp label_503
+label_546:
+        mov rsi, 2
+        mov rdi, r14
+        call string_ord
+        mov rax, rax
+        cmp rax, 75
+        je label_548
+        mov r13, qword [rel A_sp_0]
+        mov rcx, qword [r13+0*8]
+        mov rax, qword [rcx+4*8]
         cmp rax, 1
-        je label_88
-        mov rdi, S_2
+        je label_553
+label_554:
+        mov rax, qword [rcx+6*8]
+        cmp rax, 1
+        je label_565
+label_566:
+        mov rax, qword [r13+0*8]
+        lea rax, [rax+9*8]
+        mov rax, qword [rax]
+        mov rdi, rax
+        call toString
+        mov rax, rax
+        mov rsi, S_2
+        mov rdi, rax
+        call string_strcat
+        mov rax, rax
+        mov rdi, rax
+        call print
+label_549:
+        jmp label_547
+label_565:
+        mov rsi, 0
+label_567:
+        cmp rsi, 2
+        jl label_569
+        mov qword [rcx+6*8], 0
+        jmp label_566
+label_569:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_572
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+0*8+8]
+        mov rdx, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea r8, [rax+0*8+8]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov rax, qword [rax]
+        mov qword [r8], rax
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], rdx
+        mov rdx, qword [rdi+7*8]
+        mov rax, qword [rdi+8*8]
+        mov qword [rdi+7*8], rax
+        mov qword [rdi+8*8], rdx
+        mov rax, qword [rdi+6*8]
+        xor rax, 1
+        mov qword [rdi+6*8], rax
+label_572:
+        inc rsi
+        jmp label_567
+label_553:
+        mov rsi, 0
+label_555:
+        cmp rsi, 2
+        jl label_557
+        mov qword [rcx+4*8], 0
+        jmp label_554
+label_557:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_560
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov r8, qword [rcx+5*8]
+        mov qword [rdi+1*8], r8
+        mov rax, qword [rdi+2*8]
+        imul r8
+        mov rax, rax
+        mov qword [rdi+3*8], rax
+        cmp r8, 0
+        jl label_564
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+7*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+8*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+9*8], rax
+label_563:
+        mov qword [rdi+4*8], 1
+        mov qword [rdi+5*8], r8
+label_560:
+        inc rsi
+        jmp label_555
+label_564:
+        mov qword [rdi+7*8], r8
+        mov qword [rdi+8*8], r8
+        mov qword [rdi+9*8], r8
+        jmp label_563
+label_548:
+        call getInt
+        mov rax, rax
+        mov r15, rax
+        call getInt
+        mov rax, rax
+        mov r14, rax
+        call getInt
+        mov rax, rax
+        mov rcx, rax
+        mov rax, r15
+        inc rax
+        mov rdx, r15
+        add rdx, r14
+        mov rcx, rcx
+        mov rdx, rdx
+        mov rsi, rax
+        mov rdi, qword [rel A_sp_0]
+        call splay_tree_change
+        jmp label_549
+label_518:
+        call getInt
+        mov rax, rax
+        mov r15, rax
+        call getInt
+        mov rax, rax
+        mov rax, rax
+        cmp rax, 0
+        jg label_520
+        mov rdi, S_1
+        call print
+label_521:
+        jmp label_519
+label_520:
+        mov rcx, r15
+        inc rcx
+        mov rdx, r15
+        add rdx, rax
+        mov r13, qword [rel A_sp_0]
+        mov r12, rcx
+        mov rax, rdx
+        mov rax, rax
+        inc rax
+        mov rsi, rax
+        mov rdi, r13
+        call splay_tree_find
+        mov rax, rax
+        mov r15, rax
+        mov rsi, 0
+        mov rdi, r15
+        call Node_rotto
+        mov qword [r13+0*8], r15
+        mov rax, r12
+        sub rax, 1
+        mov rsi, rax
+        mov rdi, r13
+        call splay_tree_find
+        mov rax, rax
+        mov r15, rax
+        mov rsi, qword [r13+0*8]
+        mov rdi, r15
+        call Node_rotto
+        lea rax, [r15+10*8]
+        mov rax, qword [rax]
+        lea rax, [rax+1*8+8]
+        mov r15, qword [rax]
+        mov rcx, r15
+        mov rax, qword [rcx+4*8]
+        cmp rax, 1
+        je label_525
+label_526:
+        mov rax, qword [rcx+6*8]
+        cmp rax, 1
+        je label_537
+label_538:
+        lea rax, [r15+3*8]
+        mov r12, qword [rax]
+        mov rsi, 0
+        mov rdi, r15
+        call Node_rotto
+        mov qword [r13+0*8], r15
+        mov rax, r12
+        mov rdi, rax
+        call toString
+        mov rax, rax
+        mov rdi, rax
         call println
-        mov rax, 1
-label_86:
+        jmp label_521
+label_537:
+        mov rsi, 0
+label_539:
+        cmp rsi, 2
+        jl label_541
+        mov qword [rcx+6*8], 0
+        jmp label_538
+label_541:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_544
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+0*8+8]
+        mov rdx, qword [rax]
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+0*8+8]
+        mov r8, qword [rdi+10*8]
+        lea r8, [r8+1*8+8]
+        mov r8, qword [r8]
+        mov qword [rax], r8
+        mov rax, qword [rdi+10*8]
+        lea rax, [rax+1*8+8]
+        mov qword [rax], rdx
+        mov rdx, qword [rdi+7*8]
+        mov rax, qword [rdi+8*8]
+        mov qword [rdi+7*8], rax
+        mov qword [rdi+8*8], rdx
+        mov rax, qword [rdi+6*8]
+        xor rax, 1
+        mov qword [rdi+6*8], rax
+label_544:
+        inc rsi
+        jmp label_539
+label_525:
+        mov rsi, 0
+label_527:
+        cmp rsi, 2
+        jl label_529
+        mov qword [rcx+4*8], 0
+        jmp label_526
+label_529:
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rax, qword [rax]
+        cmp rax, 0
+        je label_532
+        mov rax, qword [rcx+10*8]
+        lea rax, [rax+rsi*8+8]
+        mov rdi, qword [rax]
+        mov r8, qword [rcx+5*8]
+        mov qword [rdi+1*8], r8
+        mov rax, qword [rdi+2*8]
+        imul r8
+        mov rax, rax
+        mov qword [rdi+3*8], rax
+        cmp r8, 0
+        jl label_536
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+7*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+8*8], rax
+        mov rax, qword [rdi+3*8]
+        mov qword [rdi+9*8], rax
+label_535:
+        mov qword [rdi+4*8], 1
+        mov qword [rdi+5*8], r8
+label_532:
+        inc rsi
+        jmp label_527
+label_536:
+        mov qword [rdi+7*8], r8
+        mov qword [rdi+8*8], r8
+        mov qword [rdi+9*8], r8
+        jmp label_535
+label_516:
+        call getInt
+        mov rax, rax
+        mov r15, rax
+        call getInt
+        mov rax, rax
+        mov rax, rax
+        mov rcx, r15
+        inc rcx
+        mov rdx, r15
+        add rdx, rax
+        mov rdx, rdx
+        mov rsi, rcx
+        mov rdi, qword [rel A_sp_0]
+        call splay_tree_rol
+        jmp label_517
+label_514:
+        call getInt
+        mov rax, rax
+        mov r15, rax
+        call getInt
+        mov rax, rax
+        mov rdx, rax
+        mov rax, r15
+        inc rax
+        mov rcx, r15
+        add rcx, rdx
+        mov rdx, rcx
+        mov rsi, rax
+        mov rdi, qword [rel A_sp_0]
+        call splay_tree_del
+        jmp label_515
+label_507:
+        call getInt
+        mov rax, rax
+        mov rax, rax
+        mov qword [rbp+-8], rax
+        call getInt
+        mov rax, rax
+        mov r15, rax
+        mov r12, 1
+label_509:
+        cmp r12, r15
+        jg label_510
+        mov rax, qword [rel A_din_0]
+        lea r13, [rax+r12*8+8]
+        call getInt
+        mov rax, rax
+        mov qword [r13], rax
+        inc r12
+        jmp label_509
+label_510:
+        mov r13, qword [rel A_dintree_0]
+        mov r12, 1
+        mov r15, r15
+        mov rdi, 96
+        call malloc
+        mov rax, rax
+        mov qword [r13+0*8], rax
+        mov rax, qword [rel V_id_cnt_0]
+        inc rax
+        mov qword [rel V_id_cnt_0], rax
+        mov rdx, qword [rel V_id_cnt_0]
+        mov rsi, 0
+        mov rdi, qword [r13+0*8]
+        call Node_init
+        mov r8, r15
+        mov rcx, r12
+        mov rdx, 0
+        mov rsi, qword [r13+0*8]
+        mov rdi, r13
+        call splay_tree_build
+        mov rax, qword [rbp+-8]
+        mov rax, rax
+        inc rax
+        mov rdx, qword [rel A_dintree_0]
+        mov rsi, qword [rel A_sp_0]
+        mov rdi, rax
+        call merge
+        jmp label_508
+label_504:
+        mov rax, 0
+        pop r15
         pop rbx
-        pop r12
         pop r14
+        pop r13
+        pop r12
         mov rsp, rbp
         pop rbp
         ret 
-label_88:
-        mov rdi, S_3
-        call println
-        mov rax, 3654898
-        mov qword [rel V_seed_0], rax
-        mov rax, qword [rel V_seed_0]
-        cdq 
-        mov rcx, qword [rel V_Q_0]
-        idiv rcx
-        mov rcx, rdx
-        mov rax, qword [rel V_A_0]
-        imul rcx
-        mov rcx, rax
-        mov rax, qword [rel V_seed_0]
-        cdq 
-        mov rsi, qword [rel V_Q_0]
-        idiv rsi
-        mov rdx, rax
-        mov rax, qword [rel V_R_0]
-        imul rdx
-        mov rsi, rax
-        mov rax, rcx
-        sub rax, rsi
-        mov rax, rax
-        cmp rax, 0
-        jl label_104
-        mov qword [rel V_seed_0], rax
-label_103:
-        mov rax, qword [rel V_seed_0]
-        mov rax, rax
-        cdq 
-        mov rcx, 10
-        idiv rcx
-        mov rax, rdx
-        mov rax, rax
-        inc rax
-        mov qword [rel V_now_0], rax
-        mov rdi, qword [rel V_now_0]
-        call toString
-        mov rax, rax
-        mov rdi, rax
-        call println
-label_105:
-        mov rax, qword [rel V_now_0]
-        sub rax, 1
-        cmp r12, rax
-        jl label_107
-        mov rcx, qword [rel V_now_0]
-        sub rcx, 1
-        mov rax, qword [rel A_a_0]
-        lea rcx, [rax+rcx*8+8]
-        mov rax, qword [rel V_n_0]
-        sub rax, r14
-        mov qword [rcx], rax
-        mov r12, 0
-label_121:
-        cmp r12, qword [rel V_now_0]
-        jl label_123
-        mov rdi, S_5
-        call println
-        mov rcx, 0
-label_126:
-        cmp rcx, qword [rel V_now_0]
-        jl label_128
-        mov rcx, 0
-label_139:
-        cmp rcx, qword [rel V_now_0]
-        jl label_141
-label_140:
-label_145:
-        call win
-        mov rax, rax
-        cmp rax, 1
-        je label_147
-        inc rbx
-        mov rdi, rbx
-        call toString
-        mov rax, rax
-        mov rsi, rax
-        mov rdi, S_6
-        call string_strcat
-        mov rax, rax
-        mov rsi, S_7
-        mov rdi, rax
-        call string_strcat
-        mov rax, rax
-        mov rdi, rax
-        call println
-        mov rcx, 0
-label_149:
-        cmp rcx, qword [rel V_now_0]
-        jl label_151
-        mov rcx, qword [rel A_a_0]
-        mov rax, qword [rel V_now_0]
-        lea rax, [rcx+rax*8+8]
-        mov rcx, qword [rel V_now_0]
-        mov qword [rax], rcx
-        mov rax, qword [rel V_now_0]
-        inc rax
-        mov qword [rel V_now_0], rax
-        mov rcx, 0
-label_153:
-        cmp rcx, qword [rel V_now_0]
-        jl label_155
-        mov rcx, 0
-label_166:
-        cmp rcx, qword [rel V_now_0]
-        jl label_168
-label_167:
-        mov r12, 0
-label_173:
-        cmp r12, qword [rel V_now_0]
-        jl label_175
-        mov rdi, S_9
-        call println
-        jmp label_145
-label_175:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+r12*8+8]
-        mov rdi, qword [rax]
-        call toString
-        mov rax, rax
-        mov rsi, S_8
-        mov rdi, rax
-        call string_strcat
-        mov rax, rax
-        mov rdi, rax
-        call print
-        inc r12
-        jmp label_173
-label_168:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rcx*8+8]
-        mov rax, qword [rax]
-        cmp rax, 0
-        je label_170
-        inc rcx
-        jmp label_166
-label_170:
-        mov qword [rel V_now_0], rcx
-        jmp label_167
-label_155:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rcx*8+8]
-        mov rax, qword [rax]
-        cmp rax, 0
-        je label_157
-label_158:
-        inc rcx
-        jmp label_153
-label_157:
-        mov rax, rcx
-        inc rax
-        mov rdx, rax
-label_159:
-        cmp rdx, qword [rel V_now_0]
-        jl label_161
-label_160:
-        jmp label_158
-label_161:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rdx*8+8]
-        mov rax, qword [rax]
-        cmp rax, 0
-        je label_164
-        mov rsi, rcx
-        mov rdi, rdx
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rsi*8+8]
-        mov rdx, qword [rax]
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rsi*8+8]
-        mov rsi, qword [rel A_a_0]
-        lea rsi, [rsi+rdi*8+8]
-        mov rsi, qword [rsi]
-        mov qword [rax], rsi
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rdi*8+8]
-        mov qword [rax], rdx
-        jmp label_160
-label_164:
-        inc rdx
-        jmp label_159
-label_151:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rcx*8+8]
-        mov rdx, qword [rax]
-        sub rdx, 1
-        mov qword [rax], rdx
-        mov rax, rcx
-        inc rax
-        mov rcx, rax
-        jmp label_149
-label_147:
-        mov rdi, rbx
-        call toString
-        mov rax, rax
-        mov rsi, rax
-        mov rdi, S_10
-        call string_strcat
-        mov rax, rax
-        mov rsi, S_11
-        mov rdi, rax
-        call string_strcat
-        mov rax, rax
-        mov rdi, rax
-        call println
-        mov rax, 0
-        jmp label_86
-label_141:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rcx*8+8]
-        mov rax, qword [rax]
-        cmp rax, 0
-        je label_143
-        inc rcx
-        jmp label_139
-label_143:
-        mov qword [rel V_now_0], rcx
-        jmp label_140
-label_128:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rcx*8+8]
-        mov rax, qword [rax]
-        cmp rax, 0
-        je label_130
-label_131:
-        inc rcx
-        jmp label_126
-label_130:
-        mov rax, rcx
-        inc rax
-        mov rdx, rax
-label_132:
-        cmp rdx, qword [rel V_now_0]
-        jl label_134
-label_133:
-        jmp label_131
-label_134:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rdx*8+8]
-        mov rax, qword [rax]
-        cmp rax, 0
-        je label_137
-        mov rsi, rcx
-        mov rdi, rdx
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rsi*8+8]
-        mov rdx, qword [rax]
-        mov rax, qword [rel A_a_0]
-        lea rsi, [rax+rsi*8+8]
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rdi*8+8]
-        mov rax, qword [rax]
-        mov qword [rsi], rax
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+rdi*8+8]
-        mov qword [rax], rdx
-        jmp label_133
-label_137:
-        inc rdx
-        jmp label_132
-label_123:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+r12*8+8]
-        mov rdi, qword [rax]
-        call toString
-        mov rax, rax
-        mov rsi, S_4
-        mov rdi, rax
-        call string_strcat
-        mov rax, rax
-        mov rdi, rax
-        call print
-        inc r12
-        jmp label_121
-label_107:
-        mov rax, qword [rel A_a_0]
-        lea rsi, [rax+r12*8+8]
-        mov rax, qword [rel V_seed_0]
-        cdq 
-        mov rcx, qword [rel V_Q_0]
-        idiv rcx
-        mov rcx, rdx
-        mov rax, qword [rel V_A_0]
-        imul rcx
-        mov rdi, rax
-        mov rax, qword [rel V_seed_0]
-        cdq 
-        mov rcx, qword [rel V_Q_0]
-        idiv rcx
-        mov rcx, rax
-        mov rax, qword [rel V_R_0]
-        imul rcx
-        mov rax, rax
-        mov rcx, rdi
-        sub rcx, rax
-        mov rax, rcx
-        cmp rax, 0
-        jl label_112
-        mov qword [rel V_seed_0], rax
-label_111:
-        mov rax, qword [rel V_seed_0]
-        mov rax, rax
-        cdq 
-        mov rcx, 10
-        idiv rcx
-        mov rax, rdx
-        mov rax, rax
-        inc rax
-        mov qword [rsi], rax
-label_113:
-        mov rax, qword [rel A_a_0]
-        lea rax, [rax+r12*8+8]
-        mov rax, qword [rax]
-        add rax, r14
-        cmp rax, qword [rel V_n_0]
-        jg label_114
-        mov rax, qword [rel A_a_0]
-        lea rcx, [rax+r12*8+8]
-        mov rax, r14
-        add rax, qword [rcx]
-        mov r14, rax
-        inc r12
-        jmp label_105
-label_114:
-        mov rax, qword [rel A_a_0]
-        lea rsi, [rax+r12*8+8]
-        mov rax, qword [rel V_seed_0]
-        cdq 
-        mov rcx, qword [rel V_Q_0]
-        idiv rcx
-        mov rcx, rdx
-        mov rax, qword [rel V_A_0]
-        imul rcx
-        mov rdi, rax
-        mov rax, qword [rel V_seed_0]
-        cdq 
-        mov rcx, qword [rel V_Q_0]
-        idiv rcx
-        mov rcx, rax
-        mov rax, qword [rel V_R_0]
-        imul rcx
-        mov rax, rax
-        mov rcx, rdi
-        sub rcx, rax
-        mov rax, rcx
-        cmp rax, 0
-        jl label_119
-        mov qword [rel V_seed_0], rax
-label_118:
-        mov rax, qword [rel V_seed_0]
-        mov rax, rax
-        cdq 
-        mov rcx, 10
-        idiv rcx
-        mov rax, rdx
-        mov rax, rax
-        inc rax
-        mov qword [rsi], rax
-        jmp label_113
-label_119:
-        mov rax, rax
-        add rax, qword [rel V_M_0]
-        mov qword [rel V_seed_0], rax
-        jmp label_118
-label_112:
-        mov rax, rax
-        add rax, qword [rel V_M_0]
-        mov qword [rel V_seed_0], rax
-        jmp label_111
-label_104:
-        mov rax, rax
-        add rax, qword [rel V_M_0]
-        mov qword [rel V_seed_0], rax
-        jmp label_103
-label_91:
-        mov rax, 0
-        jmp label_89
 
 
 
@@ -1396,62 +3428,35 @@ SECTION .data    align=8
 
 
 SECTION .bss     align=8
+V_INF_0:
+         resq 1
+V_nMax_0:
+         resq 1
 V_n_0:
          resq 1
-V_h_0:
+V_m_0:
          resq 1
-V_now_0:
+V_id_cnt_0:
          resq 1
-A_a_0:
+A_din_0:
          resq 1
-V_A_0:
+A_sp_0:
          resq 1
-V_M_0:
+A_dintree_0:
          resq 1
-V_Q_0:
-         resq 1
-V_R_0:
-         resq 1
-V_seed_0:
+A_char_ID_0:
          resq 1
 
 SECTION .rodata
 S_1: 
-         dq 0
-         db 00H
+         dq 2
+         db 30H, 0AH, 00H
 S_0: 
-         dq 1
-         db 20H, 00H
-S_3: 
-         dq 12
-         db 4CH, 65H, 74H, 27H, 73H, 20H, 73H, 74H, 61H, 72H, 74H, 21H, 00H
+         dq 2
+         db 49H, 44H, 00H
 S_2: 
-         dq 79
-         db 53H, 6FH, 72H, 72H, 79H, 2CH, 20H, 74H, 68H, 65H, 20H, 6EH, 75H, 6DH, 62H, 65H, 72H, 20H, 6EH, 20H, 6DH, 75H, 73H, 74H, 20H, 62H, 65H, 20H, 61H, 20H, 6EH, 75H, 6DH, 62H, 65H, 72H, 20H, 73H, 2EH, 74H, 2EH, 20H, 74H, 68H, 65H, 72H, 65H, 20H, 65H, 78H, 69H, 73H, 74H, 73H, 20H, 69H, 20H, 73H, 61H, 74H, 69H, 73H, 66H, 79H, 69H, 6EH, 67H, 20H, 6EH, 3DH, 31H, 2BH, 32H, 2BH, 2EH, 2EH, 2EH, 2BH, 69H, 00H
-S_5: 
-         dq 0
-         db 00H
-S_4: 
          dq 1
-         db 20H, 00H
-S_7: 
-         dq 1
-         db 3AH, 00H
-S_6: 
-         dq 5
-         db 73H, 74H, 65H, 70H, 20H, 00H
-S_11: 
-         dq 8
-         db 20H, 73H, 74H, 65H, 70H, 28H, 73H, 29H, 00H
-S_9: 
-         dq 0
-         db 00H
-S_10: 
-         dq 7
-         db 54H, 6FH, 74H, 61H, 6CH, 3AH, 20H, 00H
-S_8: 
-         dq 1
-         db 20H, 00H
+         db 0AH, 00H
 
 L_033:
         db 25H, 6CH, 64H, 00H

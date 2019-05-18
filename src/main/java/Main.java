@@ -70,9 +70,9 @@ public class Main {
 
     public static void main (String[] args) throws Exception {
 
-        DumpFile("tst");
-//        InputStream is = System.in;
-        InputStream is = new FileInputStream("test.txt");
+//        DumpFile("tst");
+        InputStream is = System.in;
+//        InputStream is = new FileInputStream("test.txt");
         AstBuild(is);
         ScopeBuild();
         SemanticCheck();

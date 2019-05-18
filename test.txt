@@ -1,665 +1,452 @@
-// Target: Simulate a Bulgarian-solitaire game.
-// Possible opitimization: Dead code elimination, common expression, inline function, loop unrolling, etc.
-// REMARKS: A funny game. If you like, you can try to prove that when n=1+2+..+i(i>0), the game will always stop
-//          and converge to the only solution: {1,2,...i}.   :)
-
+int INF = 1000000000;
+int nMax = 4000010;
 int n;
-int h;
-int now;
-int[] a;
-int A = 48271;
-int M = 2147483647;
-int Q;
-int R;
-int seed=1;
-int random() {
-    int tempseed = A * (seed % Q) - R * (seed / Q);
-    if (tempseed >= 0)
-		seed = tempseed;
-    else
-		seed = tempseed + M;
-	return seed;
-}
-void initialize(int val) {
-    seed = val;
-}
-void swap(int x,int y) {
-    int temp = a[x];
-    a[x] = a[y];
-    a[y] = temp;
-}
-bool pd(int x) {
-    for (;h <= x; ++h)
-        if (x == h * (h + 1) / 2)
-			return true;
-    return false;
-}
-void show() {
-    int i;
-    for (i = 0; i < now; ++i)
-        print(toString(a[i]) + " ");
-    println("");
-}
-bool win()
+int m;
+int id_cnt = 0;
+
+int max(int a, int b)
 {
-    int i;
-	int j;
-	int[] b = new int[100];
-	int temp;
-    if (now != h)
-		return false;
-    for (j = 0; j < now; ++j)
-        b[j] = a[j];
-    for (i = 0;i < now - 1; ++i)
-        for (j = i + 1;j < now; ++j)
-            if (b[i] > b[j]) {
-                temp = b[i];
-                b[i] = b[j];
-                b[j] = temp;
-            }
-    for (i = 0; i < now; ++i)
-        if (b[i] != i + 1)
-			return false;
-    return true;
+    if(a > b)
+        return a;
+    return b;
 }
-void merge()
+
+class Node
 {
-    int i;
-    for (i = 0;i < now; ++i)
-        if (a[i] == 0) {
-            int j;
-            for (j = i+1; j < now; ++j)
-                if (a[j] != 0) {
-                    swap(i,j);
-                    break;
-                }
-        }
-    for (i=0;i<now;++i)
-        if (a[i] == 0) {
-            now = i;
-            break;
-        }
-}
-void move() {
-    int i = 0;
-    for (; i < now; ) {
-        --a[i];
-        i = i + 1;
-    }
-    a[now] = now;
-    now++;
-}
-int main() {
-    int i = 0;
-	int temp = 0;
-	int count = 0;
-	n = 3 * 7 * 10;
-	h = 0;
-	a = new int[100];
-    Q = M / A;
-    R = M % A;
-    if (!pd(n)) {
-        println("Sorry, the number n must be a number s.t. there exists i satisfying n=1+2+...+i");
-        return 1;
-    }
-    println("Let's start!");
-    initialize(3654898);
-    now = random() % 10 + 1;
-    println(toString(now));
-    for (; i < now - 1; ++i)
+    int id;
+    int v;
+    int siz;
+    int sum;
+    int ch_tag;
+    int ch;
+    int ro_tag;
+    int l_M;
+    int r_M;
+    int M;
+    Node[] son;
+    Node fa;
+    void copy(Node ob)
     {
-        a[i] = random() % 10 + 1;
-        while (a[i] + temp > n)
-            a[i] = random() % 10 + 1;
-        temp = temp + a[i];
+        id = ob.id;
+        v = ob.v;
+        siz = ob.siz;
+        sum = ob.sum;
+        ch_tag = ob.ch_tag;
+        ch = ob.ch;
+        ro_tag = ob.ro_tag;
+        l_M = ob.l_M;
+        r_M = ob.r_M;
+        M = ob.M;
+        son[0] = ob.son[0];
+        son[1] = ob.son[1];
+        fa = ob.fa;
     }
-    a[now - 1] = n - temp;
-    show();
-    merge();
-    while (!win()) {
-        println("step " + toString(++count) + ":");
-        move();
-        merge();
-        show();
+    void init(int a, int ida)
+    {
+        id = ida;
+        siz = 1;
+        ch_tag = 0;
+        ro_tag = 0;
+        ch = 0;
+        sum = a;
+        v = a;
+        l_M = a;
+        r_M = a;
+        M = a;
+        son = new Node[2];
+        son[0] = null;
+        son[1] = null;
+        fa = null;
     }
-    println("Total: " + toString(count) + " step(s)");
+    int judge(Node a)
+    {
+        if(equ(son[0], a))
+            return 0;
+        else
+            return 1;
+    }
+    void push_up()
+    {
+        siz = 1;
+        sum = v;
+        int i;
+        for(i = 0; i < 2; ++i)
+            if(son[i] != null)
+            {
+                siz = siz + son[i].siz;
+                sum = sum + son[i].sum;
+            }
+        l_M = v;
+        r_M = v;
+        M = v;
+        int lsum = v;
+        int rsum = v;
+        if(son[0] != null)
+        {
+            l_M = son[0].l_M;
+            lsum = lsum + son[0].sum;
+            rsum = rsum + max(son[0].r_M, 0);
+        }
+        if(son[1] != null)
+        {
+            r_M = son[1].r_M;
+            rsum = rsum + son[1].sum;
+            lsum = lsum + max(son[1].l_M, 0);
+        }
+        l_M = max(l_M, lsum);
+        r_M = max(r_M, rsum);
+        for(i = 0; i < 2; ++i)
+            if(son[i] != null)
+                M = max(M, son[i].M);
+        int ls = v;
+        if(son[0] != null)
+            ls = ls + max(son[0].r_M, 0);
+        if(son[1] != null)
+            ls = ls + max(son[1].l_M, 0);
+        M = max(M, ls);
+    }
+    void addtag_ch(int a)
+    {
+        v = a;
+        sum = siz * a;
+        if(a >= 0)
+        {
+            l_M = sum;
+            r_M = sum;
+            M = sum;
+        }
+        else
+        {
+            l_M = a;
+            r_M = a;
+            M = a;
+        }
+        ch_tag = 1;
+        ch = a;
+    }
+    void addtag_ro()
+    {
+        Node tmp;
+        tmp = son[0];
+        son[0] = son[1];
+        son[1] = tmp;
+        int t;
+        t = l_M;
+        l_M = r_M;
+        r_M = t;
+        ro_tag = ro_tag ^ 1;
+    }
+    void push_down()
+    {
+        int i;
+        if(ch_tag == 1)
+        {
+            for(i = 0; i < 2; ++i)
+                if(son[i] != null)
+                    son[i].addtag_ch(ch);
+            ch_tag = 0;
+        }
+        if(ro_tag == 1)
+        {
+            for(i = 0; i < 2; ++i)
+                if(son[i] != null)
+                    son[i].addtag_ro();
+            ro_tag = 0;
+        }
+    }
+    void rot()
+    {
+        Node fat = fa;
+        int kind = fat.judge(this);
+        fat.son[kind] = son[kind ^ 1];
+        son[kind ^ 1] = fat;
+        if(fat.son[kind] != null)
+            fat.son[kind].fa = fat;
+        fa = fat.fa;
+        fat.fa = this;
+        if(fa != null)
+            fa.son[fa.judge(fat)]=this;
+        fat.push_up();
+    }
+    void rotto(Node to)
+    {
+        Node fat;
+        while(!equ(fa, to))
+        {
+            fat = fa;
+            if(equ(fat.fa, to))
+            {
+                rot();
+                continue;
+            }
+            if(fat.fa.judge(fat) == fat.judge(this))
+            {
+                fat.rot();
+                rot();
+            }
+            else
+            {
+                rot();
+                rot();
+            }
+        }
+        push_up();
+        if(fa != null)
+            fa.push_up();
+    }
+}
+
+int[] din = new int[nMax];
+
+class splay_tree
+{
+    Node root;
+    splay_tree()
+    {
+        root = null;
+    }
+    void build(Node now, Node fat, int l, int r)
+    {
+        int mid = (l + r) >> 1;
+        Node a = new Node;
+        a.init(din[mid], ++id_cnt);
+        now.copy(a);
+        now.fa = fat;
+        if(l < mid)
+        {
+            now.son[0] = new Node;
+            now.son[0].init(0, ++id_cnt);
+            build(now.son[0], now, l, mid-1);
+        }
+        if(r > mid)
+        {
+            now.son[1] = new Node;
+            now.son[1].init(0, ++id_cnt);
+            build(now.son[1], now, mid + 1, r);
+        }
+        now.push_up();
+    }
+    void build_tree(int l, int r)
+    {
+        root = new Node;
+        root.init(0, ++id_cnt);
+        build(root, null, l, r);
+    }
+    Node find(int a)
+    {
+        Node now = root;
+        int rank = 0;
+        int ls;
+        if(now.son[0] != null)
+            ls = now.son[0].siz + 1;
+        else
+            ls = 1;
+        while(rank + ls != a)
+        {
+            if(a < rank + ls)
+            {
+                now = now.son[0];
+            }
+            else
+            {
+                rank = rank + ls;
+                now = now.son[1];
+            }
+            now.push_down();
+
+            if(now.son[0] != null)
+                ls = now.son[0].siz + 1;
+            else
+                ls = 1;
+        }
+        return now;
+    }
+
+    void dfs(Node now)
+    {
+        int i;
+        for(i = 0; i < 2; i++)
+        {
+            if(now.son[i] != null)
+                dfs(now.son[i]);
+        }
+        //delete now;
+    }
+
+    void del(int l, int r)
+    {
+        Node ls;
+        ls = find(r + 1);
+        ls.rotto(null);
+        root = ls;
+        ls = find(l - 1);
+        ls.rotto(root);
+        if(ls.son[1] != null)
+            dfs(ls.son[1]);
+        ls.son[1] = null;
+        ls.rotto(null);
+        root = ls;
+    }
+
+    void change(int l, int r, int a)
+    {
+        Node ls;
+        ls = find(r + 1);
+        ls.rotto(null);
+        root = ls;
+        ls = find(l - 1);
+        ls.rotto(root);
+        ls = ls.son[1];
+        ls.push_down();
+        ls.addtag_ch(a);
+        ls.push_down();
+        ls.rotto(null);
+        root = ls;
+    }
+
+    void rol(int l, int r)
+    {
+        Node ls;
+        ls = find(r + 1);
+        ls.rotto(null);
+        root = ls;
+        ls = find(l - 1);
+        ls.rotto(root);
+        ls = ls.son[1];
+        ls.push_down();
+        ls.addtag_ro();
+        ls.push_down();
+        ls.rotto(null);
+        root = ls;
+    }
+
+    int getsum(int l, int r)
+    {
+        Node ls;
+        ls = find(r + 1);
+        ls.rotto(null);
+        root = ls;
+        ls = find(l - 1);
+        ls.rotto(root);
+        ls = ls.son[1];
+        ls.push_down();
+        int ans = ls.sum;
+        ls.rotto(null);
+        root = ls;
+        return ans;
+    }
+
+    int getMax()
+    {
+        root.push_down();
+        return root.M;
+    }
+}
+
+bool equ(Node a, Node b)
+{
+    if(a == null)
+    {
+        if(b == null)
+            return true;
+        return false;
+    }
+    if(b == null)
+        return false;
+    return a.id == b.id;
+}
+
+void merge(int a, splay_tree b, splay_tree c)
+{
+    Node ls = b.find(a + 1);
+    ls.rotto(null);
+    b.root = ls;
+    ls = b.find(a);
+    ls.rotto(b.root);
+    ls.son[1] = c.root;
+    c.root.fa = ls;
+    ls.rotto(null);
+    b.root = ls;
+}
+
+splay_tree sp;
+splay_tree dintree;
+
+string char_ID = "ID";
+
+int main()
+{
+    n = getInt();
+    m = getInt();
+    sp = new splay_tree;
+    dintree = new splay_tree;
+    din[0] = -INF;
+    din[n + 1] = -INF;
+    int i;
+    for(i = 1; i <= n; i++)
+        din[i] = getInt();
+    sp.build_tree(0, n + 1);
+    int cg;
+    for(i = 1; i <= m; ++i)
+    {
+        string str;
+        str = getString();
+        if(str.ord(0) == char_ID.ord(0))
+        {
+            int a;
+            int b;
+            a = getInt();
+            b = getInt();
+            int i;
+            for(i = 1; i <= b; ++i)
+                din[i] = getInt();
+            dintree.build_tree(1, b);
+            merge(a + 1, sp, dintree);
+        }
+        if(str.ord(0) == char_ID.ord(1))
+        {
+            int a;
+            int b;
+            a = getInt();
+            b = getInt();
+            sp.del(a + 1, a + b);
+        }
+        if(str.ord(0) == 82)
+        {
+            int a;
+            int b;
+            a = getInt();
+            b = getInt();
+            sp.rol(a + 1, a + b);
+        }
+        if(str.ord(0) == 71)
+        {
+            int a;
+            int b;
+            a = getInt();
+            b = getInt();
+            if(b > 0)
+                println(toString(sp.getsum(a + 1, a + b)));
+            else
+                print("0\n");
+        }
+        if(str.ord(0) == 77)
+        {
+            if(str.ord(2) == 75)
+            {
+                int a;
+                int b;
+                int c;
+                a = getInt();
+                b = getInt();
+                c = getInt();
+                sp.change(a + 1, a + b, c);
+            }
+            else
+            {
+                print(toString(sp.getMax()) + "\n");
+            }
+        }
+    }
     return 0;
 }
-
-
-
-
-/*!! metadata:
-=== comment ===
-bulgarian-5110379024-wuhang.mx
-=== input ===
-
-=== assert ===
-output
-=== timeout ===
-0.1
-=== output ===
-Let's start!
-5
-5 5 1 6 193
-step 1:
-4 4 5 192 5
-step 2:
-3 3 4 191 4 5
-step 3:
-2 2 3 190 3 4 6
-step 4:
-1 1 2 189 2 3 5 7
-step 5:
-1 188 1 2 4 6 8
-step 6:
-187 1 3 5 7 7
-step 7:
-186 2 4 6 6 6
-step 8:
-185 1 3 5 5 5 6
-step 9:
-184 2 4 4 4 5 7
-step 10:
-183 1 3 3 3 4 6 7
-step 11:
-182 2 2 2 3 5 6 8
-step 12:
-181 1 1 1 2 4 5 7 8
-step 13:
-180 1 3 4 6 7 9
-step 14:
-179 2 3 5 6 8 7
-step 15:
-178 1 2 4 5 7 6 7
-step 16:
-177 1 3 4 6 5 6 8
-step 17:
-176 2 3 5 4 5 7 8
-step 18:
-175 1 2 4 3 4 6 7 8
-step 19:
-174 1 3 2 3 5 6 7 9
-step 20:
-173 2 1 2 4 5 6 8 9
-step 21:
-172 1 1 3 4 5 7 8 9
-step 22:
-171 2 3 4 6 7 8 9
-step 23:
-170 1 2 3 5 6 7 8 8
-step 24:
-169 1 2 4 5 6 7 7 9
-step 25:
-168 1 3 4 5 6 6 8 9
-step 26:
-167 2 3 4 5 5 7 8 9
-step 27:
-166 1 2 3 4 4 6 7 8 9
-step 28:
-165 1 2 3 3 5 6 7 8 10
-step 29:
-164 1 2 2 4 5 6 7 9 10
-step 30:
-163 1 1 3 4 5 6 8 9 10
-step 31:
-162 2 3 4 5 7 8 9 10
-step 32:
-161 1 2 3 4 6 7 8 9 9
-step 33:
-160 1 2 3 5 6 7 8 8 10
-step 34:
-159 1 2 4 5 6 7 7 9 10
-step 35:
-158 1 3 4 5 6 6 8 9 10
-step 36:
-157 2 3 4 5 5 7 8 9 10
-step 37:
-156 1 2 3 4 4 6 7 8 9 10
-step 38:
-155 1 2 3 3 5 6 7 8 9 11
-step 39:
-154 1 2 2 4 5 6 7 8 10 11
-step 40:
-153 1 1 3 4 5 6 7 9 10 11
-step 41:
-152 2 3 4 5 6 8 9 10 11
-step 42:
-151 1 2 3 4 5 7 8 9 10 10
-step 43:
-150 1 2 3 4 6 7 8 9 9 11
-step 44:
-149 1 2 3 5 6 7 8 8 10 11
-step 45:
-148 1 2 4 5 6 7 7 9 10 11
-step 46:
-147 1 3 4 5 6 6 8 9 10 11
-step 47:
-146 2 3 4 5 5 7 8 9 10 11
-step 48:
-145 1 2 3 4 4 6 7 8 9 10 11
-step 49:
-144 1 2 3 3 5 6 7 8 9 10 12
-step 50:
-143 1 2 2 4 5 6 7 8 9 11 12
-step 51:
-142 1 1 3 4 5 6 7 8 10 11 12
-step 52:
-141 2 3 4 5 6 7 9 10 11 12
-step 53:
-140 1 2 3 4 5 6 8 9 10 11 11
-step 54:
-139 1 2 3 4 5 7 8 9 10 10 12
-step 55:
-138 1 2 3 4 6 7 8 9 9 11 12
-step 56:
-137 1 2 3 5 6 7 8 8 10 11 12
-step 57:
-136 1 2 4 5 6 7 7 9 10 11 12
-step 58:
-135 1 3 4 5 6 6 8 9 10 11 12
-step 59:
-134 2 3 4 5 5 7 8 9 10 11 12
-step 60:
-133 1 2 3 4 4 6 7 8 9 10 11 12
-step 61:
-132 1 2 3 3 5 6 7 8 9 10 11 13
-step 62:
-131 1 2 2 4 5 6 7 8 9 10 12 13
-step 63:
-130 1 1 3 4 5 6 7 8 9 11 12 13
-step 64:
-129 2 3 4 5 6 7 8 10 11 12 13
-step 65:
-128 1 2 3 4 5 6 7 9 10 11 12 12
-step 66:
-127 1 2 3 4 5 6 8 9 10 11 11 13
-step 67:
-126 1 2 3 4 5 7 8 9 10 10 12 13
-step 68:
-125 1 2 3 4 6 7 8 9 9 11 12 13
-step 69:
-124 1 2 3 5 6 7 8 8 10 11 12 13
-step 70:
-123 1 2 4 5 6 7 7 9 10 11 12 13
-step 71:
-122 1 3 4 5 6 6 8 9 10 11 12 13
-step 72:
-121 2 3 4 5 5 7 8 9 10 11 12 13
-step 73:
-120 1 2 3 4 4 6 7 8 9 10 11 12 13
-step 74:
-119 1 2 3 3 5 6 7 8 9 10 11 12 14
-step 75:
-118 1 2 2 4 5 6 7 8 9 10 11 13 14
-step 76:
-117 1 1 3 4 5 6 7 8 9 10 12 13 14
-step 77:
-116 2 3 4 5 6 7 8 9 11 12 13 14
-step 78:
-115 1 2 3 4 5 6 7 8 10 11 12 13 13
-step 79:
-114 1 2 3 4 5 6 7 9 10 11 12 12 14
-step 80:
-113 1 2 3 4 5 6 8 9 10 11 11 13 14
-step 81:
-112 1 2 3 4 5 7 8 9 10 10 12 13 14
-step 82:
-111 1 2 3 4 6 7 8 9 9 11 12 13 14
-step 83:
-110 1 2 3 5 6 7 8 8 10 11 12 13 14
-step 84:
-109 1 2 4 5 6 7 7 9 10 11 12 13 14
-step 85:
-108 1 3 4 5 6 6 8 9 10 11 12 13 14
-step 86:
-107 2 3 4 5 5 7 8 9 10 11 12 13 14
-step 87:
-106 1 2 3 4 4 6 7 8 9 10 11 12 13 14
-step 88:
-105 1 2 3 3 5 6 7 8 9 10 11 12 13 15
-step 89:
-104 1 2 2 4 5 6 7 8 9 10 11 12 14 15
-step 90:
-103 1 1 3 4 5 6 7 8 9 10 11 13 14 15
-step 91:
-102 2 3 4 5 6 7 8 9 10 12 13 14 15
-step 92:
-101 1 2 3 4 5 6 7 8 9 11 12 13 14 14
-step 93:
-100 1 2 3 4 5 6 7 8 10 11 12 13 13 15
-step 94:
-99 1 2 3 4 5 6 7 9 10 11 12 12 14 15
-step 95:
-98 1 2 3 4 5 6 8 9 10 11 11 13 14 15
-step 96:
-97 1 2 3 4 5 7 8 9 10 10 12 13 14 15
-step 97:
-96 1 2 3 4 6 7 8 9 9 11 12 13 14 15
-step 98:
-95 1 2 3 5 6 7 8 8 10 11 12 13 14 15
-step 99:
-94 1 2 4 5 6 7 7 9 10 11 12 13 14 15
-step 100:
-93 1 3 4 5 6 6 8 9 10 11 12 13 14 15
-step 101:
-92 2 3 4 5 5 7 8 9 10 11 12 13 14 15
-step 102:
-91 1 2 3 4 4 6 7 8 9 10 11 12 13 14 15
-step 103:
-90 1 2 3 3 5 6 7 8 9 10 11 12 13 14 16
-step 104:
-89 1 2 2 4 5 6 7 8 9 10 11 12 13 15 16
-step 105:
-88 1 1 3 4 5 6 7 8 9 10 11 12 14 15 16
-step 106:
-87 2 3 4 5 6 7 8 9 10 11 13 14 15 16
-step 107:
-86 1 2 3 4 5 6 7 8 9 10 12 13 14 15 15
-step 108:
-85 1 2 3 4 5 6 7 8 9 11 12 13 14 14 16
-step 109:
-84 1 2 3 4 5 6 7 8 10 11 12 13 13 15 16
-step 110:
-83 1 2 3 4 5 6 7 9 10 11 12 12 14 15 16
-step 111:
-82 1 2 3 4 5 6 8 9 10 11 11 13 14 15 16
-step 112:
-81 1 2 3 4 5 7 8 9 10 10 12 13 14 15 16
-step 113:
-80 1 2 3 4 6 7 8 9 9 11 12 13 14 15 16
-step 114:
-79 1 2 3 5 6 7 8 8 10 11 12 13 14 15 16
-step 115:
-78 1 2 4 5 6 7 7 9 10 11 12 13 14 15 16
-step 116:
-77 1 3 4 5 6 6 8 9 10 11 12 13 14 15 16
-step 117:
-76 2 3 4 5 5 7 8 9 10 11 12 13 14 15 16
-step 118:
-75 1 2 3 4 4 6 7 8 9 10 11 12 13 14 15 16
-step 119:
-74 1 2 3 3 5 6 7 8 9 10 11 12 13 14 15 17
-step 120:
-73 1 2 2 4 5 6 7 8 9 10 11 12 13 14 16 17
-step 121:
-72 1 1 3 4 5 6 7 8 9 10 11 12 13 15 16 17
-step 122:
-71 2 3 4 5 6 7 8 9 10 11 12 14 15 16 17
-step 123:
-70 1 2 3 4 5 6 7 8 9 10 11 13 14 15 16 16
-step 124:
-69 1 2 3 4 5 6 7 8 9 10 12 13 14 15 15 17
-step 125:
-68 1 2 3 4 5 6 7 8 9 11 12 13 14 14 16 17
-step 126:
-67 1 2 3 4 5 6 7 8 10 11 12 13 13 15 16 17
-step 127:
-66 1 2 3 4 5 6 7 9 10 11 12 12 14 15 16 17
-step 128:
-65 1 2 3 4 5 6 8 9 10 11 11 13 14 15 16 17
-step 129:
-64 1 2 3 4 5 7 8 9 10 10 12 13 14 15 16 17
-step 130:
-63 1 2 3 4 6 7 8 9 9 11 12 13 14 15 16 17
-step 131:
-62 1 2 3 5 6 7 8 8 10 11 12 13 14 15 16 17
-step 132:
-61 1 2 4 5 6 7 7 9 10 11 12 13 14 15 16 17
-step 133:
-60 1 3 4 5 6 6 8 9 10 11 12 13 14 15 16 17
-step 134:
-59 2 3 4 5 5 7 8 9 10 11 12 13 14 15 16 17
-step 135:
-58 1 2 3 4 4 6 7 8 9 10 11 12 13 14 15 16 17
-step 136:
-57 1 2 3 3 5 6 7 8 9 10 11 12 13 14 15 16 18
-step 137:
-56 1 2 2 4 5 6 7 8 9 10 11 12 13 14 15 17 18
-step 138:
-55 1 1 3 4 5 6 7 8 9 10 11 12 13 14 16 17 18
-step 139:
-54 2 3 4 5 6 7 8 9 10 11 12 13 15 16 17 18
-step 140:
-53 1 2 3 4 5 6 7 8 9 10 11 12 14 15 16 17 17
-step 141:
-52 1 2 3 4 5 6 7 8 9 10 11 13 14 15 16 16 18
-step 142:
-51 1 2 3 4 5 6 7 8 9 10 12 13 14 15 15 17 18
-step 143:
-50 1 2 3 4 5 6 7 8 9 11 12 13 14 14 16 17 18
-step 144:
-49 1 2 3 4 5 6 7 8 10 11 12 13 13 15 16 17 18
-step 145:
-48 1 2 3 4 5 6 7 9 10 11 12 12 14 15 16 17 18
-step 146:
-47 1 2 3 4 5 6 8 9 10 11 11 13 14 15 16 17 18
-step 147:
-46 1 2 3 4 5 7 8 9 10 10 12 13 14 15 16 17 18
-step 148:
-45 1 2 3 4 6 7 8 9 9 11 12 13 14 15 16 17 18
-step 149:
-44 1 2 3 5 6 7 8 8 10 11 12 13 14 15 16 17 18
-step 150:
-43 1 2 4 5 6 7 7 9 10 11 12 13 14 15 16 17 18
-step 151:
-42 1 3 4 5 6 6 8 9 10 11 12 13 14 15 16 17 18
-step 152:
-41 2 3 4 5 5 7 8 9 10 11 12 13 14 15 16 17 18
-step 153:
-40 1 2 3 4 4 6 7 8 9 10 11 12 13 14 15 16 17 18
-step 154:
-39 1 2 3 3 5 6 7 8 9 10 11 12 13 14 15 16 17 19
-step 155:
-38 1 2 2 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19
-step 156:
-37 1 1 3 4 5 6 7 8 9 10 11 12 13 14 15 17 18 19
-step 157:
-36 2 3 4 5 6 7 8 9 10 11 12 13 14 16 17 18 19
-step 158:
-35 1 2 3 4 5 6 7 8 9 10 11 12 13 15 16 17 18 18
-step 159:
-34 1 2 3 4 5 6 7 8 9 10 11 12 14 15 16 17 17 19
-step 160:
-33 1 2 3 4 5 6 7 8 9 10 11 13 14 15 16 16 18 19
-step 161:
-32 1 2 3 4 5 6 7 8 9 10 12 13 14 15 15 17 18 19
-step 162:
-31 1 2 3 4 5 6 7 8 9 11 12 13 14 14 16 17 18 19
-step 163:
-30 1 2 3 4 5 6 7 8 10 11 12 13 13 15 16 17 18 19
-step 164:
-29 1 2 3 4 5 6 7 9 10 11 12 12 14 15 16 17 18 19
-step 165:
-28 1 2 3 4 5 6 8 9 10 11 11 13 14 15 16 17 18 19
-step 166:
-27 1 2 3 4 5 7 8 9 10 10 12 13 14 15 16 17 18 19
-step 167:
-26 1 2 3 4 6 7 8 9 9 11 12 13 14 15 16 17 18 19
-step 168:
-25 1 2 3 5 6 7 8 8 10 11 12 13 14 15 16 17 18 19
-step 169:
-24 1 2 4 5 6 7 7 9 10 11 12 13 14 15 16 17 18 19
-step 170:
-23 1 3 4 5 6 6 8 9 10 11 12 13 14 15 16 17 18 19
-step 171:
-22 2 3 4 5 5 7 8 9 10 11 12 13 14 15 16 17 18 19
-step 172:
-21 1 2 3 4 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19
-step 173:
-20 1 2 3 3 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20
-step 174:
-19 1 2 2 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 20
-step 175:
-18 1 1 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 19 20
-step 176:
-17 2 3 4 5 6 7 8 9 10 11 12 13 14 15 17 18 19 20
-step 177:
-16 1 2 3 4 5 6 7 8 9 10 11 12 13 14 16 17 18 19 19
-step 178:
-15 1 2 3 4 5 6 7 8 9 10 11 12 13 15 16 17 18 18 20
-step 179:
-14 1 2 3 4 5 6 7 8 9 10 11 12 14 15 16 17 17 19 20
-step 180:
-13 1 2 3 4 5 6 7 8 9 10 11 13 14 15 16 16 18 19 20
-step 181:
-12 1 2 3 4 5 6 7 8 9 10 12 13 14 15 15 17 18 19 20
-step 182:
-11 1 2 3 4 5 6 7 8 9 11 12 13 14 14 16 17 18 19 20
-step 183:
-10 1 2 3 4 5 6 7 8 10 11 12 13 13 15 16 17 18 19 20
-step 184:
-9 1 2 3 4 5 6 7 9 10 11 12 12 14 15 16 17 18 19 20
-step 185:
-8 1 2 3 4 5 6 8 9 10 11 11 13 14 15 16 17 18 19 20
-step 186:
-7 1 2 3 4 5 7 8 9 10 10 12 13 14 15 16 17 18 19 20
-step 187:
-6 1 2 3 4 6 7 8 9 9 11 12 13 14 15 16 17 18 19 20
-step 188:
-5 1 2 3 5 6 7 8 8 10 11 12 13 14 15 16 17 18 19 20
-step 189:
-4 1 2 4 5 6 7 7 9 10 11 12 13 14 15 16 17 18 19 20
-step 190:
-3 1 3 4 5 6 6 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 191:
-2 2 3 4 5 5 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 192:
-1 1 2 3 4 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 193:
-1 2 3 3 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 21
-step 194:
-1 2 2 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20 20
-step 195:
-1 1 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 19 20
-step 196:
-2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 18 19 20
-step 197:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 17 17 18 19 19
-step 198:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 16 16 17 18 18 20
-step 199:
-1 2 3 4 5 6 7 8 9 10 11 12 13 15 15 16 17 17 19 20
-step 200:
-1 2 3 4 5 6 7 8 9 10 11 12 14 14 15 16 16 18 19 20
-step 201:
-1 2 3 4 5 6 7 8 9 10 11 13 13 14 15 15 17 18 19 20
-step 202:
-1 2 3 4 5 6 7 8 9 10 12 12 13 14 14 16 17 18 19 20
-step 203:
-1 2 3 4 5 6 7 8 9 11 11 12 13 13 15 16 17 18 19 20
-step 204:
-1 2 3 4 5 6 7 8 10 10 11 12 12 14 15 16 17 18 19 20
-step 205:
-1 2 3 4 5 6 7 9 9 10 11 11 13 14 15 16 17 18 19 20
-step 206:
-1 2 3 4 5 6 8 8 9 10 10 12 13 14 15 16 17 18 19 20
-step 207:
-1 2 3 4 5 7 7 8 9 9 11 12 13 14 15 16 17 18 19 20
-step 208:
-1 2 3 4 6 6 7 8 8 10 11 12 13 14 15 16 17 18 19 20
-step 209:
-1 2 3 5 5 6 7 7 9 10 11 12 13 14 15 16 17 18 19 20
-step 210:
-1 2 4 4 5 6 6 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 211:
-1 3 3 4 5 5 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 212:
-2 2 3 4 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 213:
-1 1 2 3 3 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 214:
-1 2 2 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 21
-step 215:
-1 1 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20 20
-step 216:
-2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 19 20
-step 217:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 18 19 19
-step 218:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 17 17 18 18 20
-step 219:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 16 16 17 17 19 20
-step 220:
-1 2 3 4 5 6 7 8 9 10 11 12 13 15 15 16 16 18 19 20
-step 221:
-1 2 3 4 5 6 7 8 9 10 11 12 14 14 15 15 17 18 19 20
-step 222:
-1 2 3 4 5 6 7 8 9 10 11 13 13 14 14 16 17 18 19 20
-step 223:
-1 2 3 4 5 6 7 8 9 10 12 12 13 13 15 16 17 18 19 20
-step 224:
-1 2 3 4 5 6 7 8 9 11 11 12 12 14 15 16 17 18 19 20
-step 225:
-1 2 3 4 5 6 7 8 10 10 11 11 13 14 15 16 17 18 19 20
-step 226:
-1 2 3 4 5 6 7 9 9 10 10 12 13 14 15 16 17 18 19 20
-step 227:
-1 2 3 4 5 6 8 8 9 9 11 12 13 14 15 16 17 18 19 20
-step 228:
-1 2 3 4 5 7 7 8 8 10 11 12 13 14 15 16 17 18 19 20
-step 229:
-1 2 3 4 6 6 7 7 9 10 11 12 13 14 15 16 17 18 19 20
-step 230:
-1 2 3 5 5 6 6 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 231:
-1 2 4 4 5 5 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 232:
-1 3 3 4 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 233:
-2 2 3 3 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 234:
-1 1 2 2 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 235:
-1 1 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 21
-step 236:
-2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20 20
-step 237:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 19 19
-step 238:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 18 18 18 20
-step 239:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 17 17 17 19 20
-step 240:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 16 16 16 18 19 20
-step 241:
-1 2 3 4 5 6 7 8 9 10 11 12 13 15 15 15 17 18 19 20
-step 242:
-1 2 3 4 5 6 7 8 9 10 11 12 14 14 14 16 17 18 19 20
-step 243:
-1 2 3 4 5 6 7 8 9 10 11 13 13 13 15 16 17 18 19 20
-step 244:
-1 2 3 4 5 6 7 8 9 10 12 12 12 14 15 16 17 18 19 20
-step 245:
-1 2 3 4 5 6 7 8 9 11 11 11 13 14 15 16 17 18 19 20
-step 246:
-1 2 3 4 5 6 7 8 10 10 10 12 13 14 15 16 17 18 19 20
-step 247:
-1 2 3 4 5 6 7 9 9 9 11 12 13 14 15 16 17 18 19 20
-step 248:
-1 2 3 4 5 6 8 8 8 10 11 12 13 14 15 16 17 18 19 20
-step 249:
-1 2 3 4 5 7 7 7 9 10 11 12 13 14 15 16 17 18 19 20
-step 250:
-1 2 3 4 6 6 6 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 251:
-1 2 3 5 5 5 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 252:
-1 2 4 4 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 253:
-1 3 3 3 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 254:
-2 2 2 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 255:
-1 1 1 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-step 256:
-2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 21
-step 257:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20 19
-Total: 257 step(s)
-=== phase ===
-codegen pretest
-=== is_public ===
-True
-
-!!*/
